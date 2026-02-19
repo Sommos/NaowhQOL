@@ -179,6 +179,13 @@ local OPTIMAL_FPS_CVARS = {
         desc = "Player Only",
         category = "advanced",
     },
+    {
+        cvar = "ResampleQuality",
+        optimal = "3",
+        name = "Resample Quality",
+        desc = "FidelityFX SR 1.0",
+        category = "advanced",
+    },
     
     -- FPS Settings
     {
@@ -209,13 +216,6 @@ local OPTIMAL_FPS_CVARS = {
         optimal = "0",
         name = "Resample Sharpness",
         desc = "0 (neutral)",
-        category = "post",
-    },
-    {
-        cvar = "ResampleQuality",
-        optimal = "3",
-        name = "Resample Quality",
-        desc = "Point (3)",
         category = "post",
     },
     {
@@ -485,15 +485,15 @@ function ns:GetCVarStatus(cvar, optimal)
         displayValue  = apiLabel(current)
         displayOptimal = apiLabel(optimal)
     elseif cvar == "graphicsShadowQuality" then
-        local L = {[1]="Low",[2]="Fair",[3]="Good",[4]="High",[5]="Ultra",[6]="Ultra High"}
+        local L = {[0]="Low",[1]="Fair",[2]="Good",[3]="High",[4]="Ultra",[5]="Ultra High"}
         displayValue  = L[tonumber(current)] or current
         displayOptimal = L[tonumber(optimal)] or optimal
     elseif cvar == "graphicsLiquidDetail" then
-        local L = {[1]="Low",[2]="Fair",[3]="Good",[4]="High"}
+        local L = {[0]="Low",[1]="Fair",[2]="Good",[3]="High"}
         displayValue  = L[tonumber(current)] or current
         displayOptimal = L[tonumber(optimal)] or optimal
     elseif cvar == "graphicsParticleDensity" then
-        local L = {[1]="Low",[2]="Fair",[3]="Good",[4]="High",[5]="Ultra"}
+        local L = {[0]="Low",[1]="Fair",[2]="Good",[3]="High",[4]="Ultra"}
         displayValue  = L[tonumber(current)] or current
         displayOptimal = L[tonumber(optimal)] or optimal
     elseif cvar == "graphicsSSAO" then
@@ -547,6 +547,10 @@ function ns:GetCVarStatus(cvar, optimal)
         local scalePercent = math.floor((tonumber(current) or 1) * 100)
         displayValue = scalePercent .. "%"
         displayOptimal = "100%"
+    elseif cvar == "ResampleQuality" then
+        local L = {[0]="Point",[1]="Bilinear",[2]="Bicubic",[3]="FidelityFX SR 1.0"}
+        displayValue  = L[tonumber(current)] or current
+        displayOptimal = L[tonumber(optimal)] or optimal
     end
     
     -- IMPROVED COMPARISON (not used for maxFPS since we handled it above)
@@ -614,7 +618,7 @@ function ns:LowEndOptimization()
     SetCVar("shadowRt",                 "0")
     SetCVar("ffxVRS",                    "0")
     SetCVar("renderScale",               "0.75")
-    SetCVar("VSync",                   "0")
+    SetCVar("VSync",                    "0")
     SetCVar("maxFPSToggle",              "1")
     SetCVar("maxFPS",                    "60")
     SetCVar("GxApi",                     "D3D11")
