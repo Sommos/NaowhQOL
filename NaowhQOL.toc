@@ -1,6 +1,7 @@
 ## Interface: 120001, 120000, 110207
 ## Title: |cff0091edNaowh|r|cffffa300QOL|r
 ## Notes: Quality of Life improvements
+## Version: 1.1.0
 ## SavedVariablesPerCharacter: NaowhQOL
 ## SavedVariables: NaowhQOL_Profiles
 ## AddonCompartmentFunc: NaowhQOL_OnAddonCompartmentClick
