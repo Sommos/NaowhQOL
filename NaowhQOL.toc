@@ -1,6 +1,7 @@
 ## Interface: 120001, 120000, 110207
 ## Title: |cff0091edNaowh|r|cffffa300QOL|r
 ## Notes: Quality of Life improvements
+## Notes-ruRU: Высокопроизводительный аддон для World of Warcraft, улучшающий качество игры и ориентированный на оптимизацию и стабильность
 ## Version: 1.1.0
 ## SavedVariablesPerCharacter: NaowhQOL
 ## SavedVariables: NaowhQOLDB, NaowhQOL_Profiles
@@ -20,6 +21,7 @@ Version.lua
 Core.lua
 Core/Localization.lua
 Locales/enUS.lua
+Locales/ruRU.lua
 Data/Widgets.lua
 Data/SoundList.lua
 Data/FontList.lua
