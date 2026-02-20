@@ -191,7 +191,11 @@ function ns:InitCombatLogger()
 
         masterCB:HookScript("OnClick", function(self)
             db.enabled = self:GetChecked() and true or false
-            if not db.enabled and LoggingCombat() then LoggingCombat(false) end
+            if not db.enabled then
+                if LoggingCombat() then LoggingCombat(false) end
+            elseif ns.CombatLogger then
+                ns.CombatLogger.ForceZoneCheck()
+            end
             sectionContainer:SetShown(db.enabled)
             RelayoutSections()
         end)

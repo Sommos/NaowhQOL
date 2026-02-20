@@ -155,6 +155,11 @@ loader:SetScript("OnEvent", function(self, event)
         -- Sync with WoW's logging state (handles /reload)
         isLogging = LoggingCombat()
 
+        -- If the module is enabled, prompt for ACL right away regardless of zone
+        if db.enabled then
+            CheckAdvancedLogging()
+        end
+
         if ns.ZoneUtil and ns.ZoneUtil.RegisterCallback then
             ns.ZoneUtil.RegisterCallback("CombatLogger", OnZoneChanged)
             -- ZoneUtil already has cached data from PLAYER_ENTERING_WORLD
@@ -168,3 +173,13 @@ loader:SetScript("OnEvent", function(self, event)
 end)
 
 ns.CombatLogger = loader
+
+-- Expose so the config UI can force a zone re-check (e.g. when the module is enabled
+-- while the player is already inside a trackable instance).
+ns.CombatLogger.ForceZoneCheck = function()
+    -- Prompt for ACL whenever the module is enabled
+    CheckAdvancedLogging()
+    if ns.ZoneUtil then
+        OnZoneChanged(ns.ZoneUtil.GetCurrentZone())
+    end
+end
