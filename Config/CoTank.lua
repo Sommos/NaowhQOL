@@ -61,9 +61,9 @@ function ns:InitCoTank()
         unlockCB:SetShown(db.enabled)
 
         local noteText = masterArea:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-        noteText:SetPoint("TOPLEFT", 200, -18)
+        noteText:SetPoint("TOPLEFT", masterArea, "TOPLEFT", 230, -8)
         noteText:SetText(W.Colorize(L["COTANK_ENABLE_DESC"] or "Shows only in raids when you are tank spec and another tank is present", C.GRAY))
-        noteText:SetWidth(250)
+        noteText:SetWidth(220)
         noteText:SetJustifyH("LEFT")
 
         -- Settings container

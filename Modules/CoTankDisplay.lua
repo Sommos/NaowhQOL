@@ -147,7 +147,9 @@ local function UpdateDisplay()
     end
 
     -- Frame is always clickable for targeting, draggable when unlocked
-    frame:EnableMouse(true)
+    if not InCombatLockdown() then
+        frame:EnableMouse(true)
+    end
     ns.DisplayUtils.SetFrameUnlocked(frame, db.unlock, L["SIDEBAR_TAB_COTANK"] or "Co-Tank")
 
     -- Frame size
