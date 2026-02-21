@@ -142,7 +142,7 @@ end
 local function UpdateDisplay()
     local db = NaowhQOL.coTank
     if not db then
-        frame:Hide()
+        if not InCombatLockdown() then frame:Hide() end
         return
     end
 
@@ -152,8 +152,10 @@ local function UpdateDisplay()
     end
     ns.DisplayUtils.SetFrameUnlocked(frame, db.unlock, L["SIDEBAR_TAB_COTANK"] or "Co-Tank")
 
-    -- Frame size
-    frame:SetSize(db.width or 150, db.height or 20)
+    -- Frame size (protected call, only allowed out of combat)
+    if not InCombatLockdown() then
+        frame:SetSize(db.width or 150, db.height or 20)
+    end
 
     -- Position
     if not frame.posInitialized then
@@ -196,12 +198,12 @@ local function UpdateDisplay()
             UpdateHealth()
         end
 
-        frame:Show()
+        if not InCombatLockdown() then frame:Show() end
     else
         if not InCombatLockdown() then
             frame:SetAttribute("unit", nil)
         end
-        frame:Hide()
+        if not InCombatLockdown() then frame:Hide() end
     end
 end
 
