@@ -15,7 +15,6 @@ jobs:
           color: "16754688"
           username: "NaowhQOL"
           avatar_url: "https://raw.githubusercontent.com/0kamiyasha/NaowhUI_Midnight/refs/heads/main/NUI_favicon.png"
-          content: "||@everyone||"
           footer_title: "Changelog"
           footer_timestamp: true
           remove_github_reference_links: true
