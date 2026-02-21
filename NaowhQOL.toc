@@ -2,6 +2,12 @@
 ## Title: |cff0091edNaowh|r|cffffa300QOL|r
 ## Notes: Quality of Life improvements
 ## Notes-ruRU: Высокопроизводительный аддон для World of Warcraft, улучшающий качество игры и ориентированный на оптимизацию и стабильность
+## Notes-frFR: Module World of Warcraft haute performance axé sur l'amélioration de la qualité de vie et l'optimisation
+## Notes-deDE: Hochleistungs-World-of-Warcraft-Addon mit Fokus auf Lebensqualitätsverbesserungen und Optimierung
+## Notes-esES: Complemento de World of Warcraft de alto rendimiento centrado en mejoras de calidad de vida y optimización
+## Notes-koKR: 삶의 질 향상과 최적화에 중점을 둔 고성능 World of Warcraft 애드온
+## Notes-zhTW: 專注於生活品質改善和最佳化的高效能 World of Warcraft 插件
+## Notes-ptBR: Addon de alto desempenho para World of Warcraft focado em melhorias de qualidade de vida e otimização
 ## Version: 1.2.2
 ## SavedVariablesPerCharacter: NaowhQOL
 ## SavedVariables: NaowhQOLDB, NaowhQOL_Profiles
@@ -22,6 +28,12 @@ Core.lua
 Core/Localization.lua
 Locales/enUS.lua
 Locales/ruRU.lua
+Locales/frFR.lua
+Locales/deDE.lua
+Locales/esES.lua
+Locales/koKR.lua
+Locales/zhTW.lua
+Locales/ptBR.lua
 Data/Widgets.lua
 Data/SoundList.lua
 Data/FontList.lua
