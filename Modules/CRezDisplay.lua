@@ -168,6 +168,7 @@ eventFrame:SetScript("OnEvent", ns.PerfMonitor:Wrap("CRez", function(self, event
         -- Register for zone changes
         ns.ZoneUtil.RegisterCallback("CRez", function()
             inMythicPlus = ns.ZoneUtil.IsInMythicPlus()
+            encounterActive = C_InstanceEncounter and C_InstanceEncounter.IsEncounterInProgress() or false
             rezFrame:Refresh()
         end)
 
