@@ -31,6 +31,16 @@ end
 -- AceDB library reference
 local AceDB = LibStub("AceDB-3.0")
 
+-- Deep copy helper used for profile snapshot restoration
+local function deepCopy(orig)
+    if type(orig) ~= "table" then return orig end
+    local copy = {}
+    for k, v in pairs(orig) do
+        copy[deepCopy(k)] = deepCopy(v)
+    end
+    return copy
+end
+
 -- Apply default values to a settings table
 local function ApplyDefaults(target, defaults)
     for k, v in pairs(defaults) do
@@ -708,16 +718,13 @@ local function InitializeDB()
         local profiles = ns.db:GetProfiles({})
         -- Ensure the profile exists in AceDB (may have been stripped if all-defaults)
         ns.db:SetProfile(target)
-        -- Apply snapshot data over whatever AceDB loaded
+        -- Apply snapshot data over whatever AceDB loaded.
+        -- Use deepCopy so the live profile shares no table references with the
+        -- stored snapshot — mutations to ns.db.profile won't corrupt the snapshot.
         local snap = NaowhQOL_Profiles.profileData and NaowhQOL_Profiles.profileData[target]
         if snap then
             for k, v in pairs(snap) do
-                if type(v) == "table" then
-                    ns.db.profile[k] = {}
-                    for tk, tv in pairs(v) do ns.db.profile[k][tk] = tv end
-                else
-                    ns.db.profile[k] = v
-                end
+                ns.db.profile[k] = deepCopy(v)
             end
         end
         NaowhQOL = ns.db.profile
