@@ -2,49 +2,50 @@
 # NaowhQOL – Pull Request Labeler Configuration
 # Docs: https://github.com/actions/labeler
 # ──────────────────────────────────────────────────────────────────────────────
-
-# ── Area labels ───────────────────────────────────────────────────────────────
-
-area: core:
+'area: core':
   - changed-files:
       - any-glob-to-any-file:
           - Core.lua
           - Version.lua
           - Core/**
 
-area: config:
+'area: config':
   - changed-files:
-      - any-glob-to-any-file: Config/**
+      - any-glob-to-any-file:
+          - Config/**
 
-area: modules:
+'area: modules':
   - changed-files:
-      - any-glob-to-any-file: Modules/**
+      - any-glob-to-any-file:
+          - Modules/**
 
-area: ui:
+'area: ui':
   - changed-files:
-      - any-glob-to-any-file: UI/**
+      - any-glob-to-any-file:
+          - UI/**
 
-area: data:
+'area: data':
   - changed-files:
-      - any-glob-to-any-file: Data/**
+      - any-glob-to-any-file:
+          - Data/**
 
-area: localization:
+'area: localization':
   - changed-files:
-      - any-glob-to-any-file: Locales/**
+      - any-glob-to-any-file:
+          - Locales/**
 
-area: assets:
+'area: assets':
   - changed-files:
-      - any-glob-to-any-file: Assets/**
+      - any-glob-to-any-file:
+          - Assets/**
 
-# ── Specific module labels ────────────────────────────────────────────────────
-
-module: buff-watcher:
+'module: buff-watcher':
   - changed-files:
       - any-glob-to-any-file:
           - Modules/BuffWatcherV2/**
           - Config/BuffWatcherV2*.lua
 
-module: combat:
+'module: combat':
   - changed-files:
       - any-glob-to-any-file:
           - Modules/CombatAlert*.lua
@@ -54,7 +55,7 @@ module: combat:
           - Config/CombatLogger.lua
           - Config/CombatTimer.lua
 
-module: cast-bars:
+'module: cast-bars':
   - changed-files:
       - any-glob-to-any-file:
           - Modules/FocusCastBar*.lua
@@ -62,13 +63,11 @@ module: cast-bars:
           - Modules/GcdTracker*.lua
           - Config/GcdTracker.lua
 
-module: range-check:
+'module: range-check':
   - changed-files:
       - any-glob-to-any-file:
           - Modules/RangeCheck*.lua
           - Config/RangeCheck.lua
-
-# ── Meta / repo labels ────────────────────────────────────────────────────────
 
 documentation:
   - changed-files:
@@ -77,13 +76,13 @@ documentation:
 
 toc:
   - changed-files:
-      - any-glob-to-any-file: '*.toc'
+      - any-glob-to-any-file:
+          - '*.toc'
 
 github-actions:
   - changed-files:
-      - any-glob-to-any-file: .github/**
-
-# ── Branch-convention labels ──────────────────────────────────────────────────
+      - any-glob-to-any-file:
+          - .github/**
 
 feature:
   - head-branch: ['^feat/', '^feature/']
