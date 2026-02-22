@@ -958,9 +958,7 @@ function ns:InitOptOptions()
         profBtn:SetScript("OnClick", function()
             if GetCVar("scriptProfile") ~= "1" then
                 SetCVar("scriptProfile", "1")
-                print(W.Colorize("Naowh QOL:", C.BLUE) .. " "
-                    .. W.Colorize("Script profiling enabled.", C.SUCCESS))
-                StaticPopup_Show("NAOWH_QOL_RELOAD")
+                StaticPopup_Show("NAOWH_PROFILER_ENABLE")
             else
                 if ns.Profiler and ns.Profiler.Toggle then
                     ns.Profiler:Toggle()
