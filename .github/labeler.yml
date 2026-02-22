@@ -95,4 +95,4 @@ chore:
 
 release:
   - base-branch: '^main$'
-  - head-branch: '^release/'
+    head-branch: '^release/'
