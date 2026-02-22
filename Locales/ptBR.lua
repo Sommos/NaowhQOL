@@ -277,6 +277,7 @@ ns:RegisterLocale("ptBR", {
     FOCUS_BG_OPACITY = "Transparência do fundo",
     FOCUS_SECTION_ICON = "Ícone",
     FOCUS_SHOW_ICON = "Mostrar ícone da magia",
+    FOCUS_AUTO_SIZE_ICON = "Ajustar ícone à barra",
     FOCUS_ICON_POS = "Posição do ícone",
     FOCUS_SECTION_TEXT = "Texto",
     FOCUS_SHOW_NAME = "Mostrar nome da magia",

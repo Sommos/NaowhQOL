@@ -277,6 +277,7 @@ ns:RegisterLocale("koKR", {
     FOCUS_BG_OPACITY = "배경 투명도",
     FOCUS_SECTION_ICON = "아이콘",
     FOCUS_SHOW_ICON = "주문 아이콘 표시",
+    FOCUS_AUTO_SIZE_ICON = "아이콘 크기 바에 맞춤",
     FOCUS_ICON_POS = "아이콘 위치",
     FOCUS_SECTION_TEXT = "텍스트",
     FOCUS_SHOW_NAME = "주문 이름 표시",

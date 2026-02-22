@@ -130,6 +130,14 @@ function ns:InitFocusCastBar()
             onChange = onUpdate
         })
 
+        W:CreateCheckbox(iconContent, {
+            label = L["FOCUS_AUTO_SIZE_ICON"],
+            db = db, key = "autoSizeIcon",
+            x = GI:Col(2), y = GI:Row(1) + 5,
+            template = "ChatConfigCheckButtonTemplate",
+            onChange = onUpdate
+        })
+
         local iconSizeSlider = W:CreateAdvancedSlider(iconContent,
             W.Colorize(L["COMMON_LABEL_ICON_SIZE"], C.ORANGE), 16, 64, -35, 1, false,
             function(val) db.iconSize = val; onUpdate() end,

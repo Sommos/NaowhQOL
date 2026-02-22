@@ -277,6 +277,7 @@ ns:RegisterLocale("esES", {
     FOCUS_BG_OPACITY = "Opacidad del fondo",
     FOCUS_SECTION_ICON = "ICONO",
     FOCUS_SHOW_ICON = "Mostrar icono del hechizo",
+    FOCUS_AUTO_SIZE_ICON = "Ajustar icono a la barra",
     FOCUS_ICON_POS = "Posición del icono",
     FOCUS_SECTION_TEXT = "TEXTO",
     FOCUS_SHOW_NAME = "Mostrar nombre del hechizo",

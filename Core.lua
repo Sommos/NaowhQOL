@@ -190,7 +190,7 @@ local FOCUS_CAST_BAR_DEFAULTS = {
     barColorR = 0.01, barColorG = 0.56, barColorB = 0.91,
     barColorCdR = 0.5, barColorCdG = 0.5, barColorCdB = 0.5,
     bgColorR = 0.12, bgColorG = 0.12, bgColorB = 0.12, bgAlpha = 0.8,
-    showIcon = true, iconSize = 24, iconPosition = "LEFT",
+    showIcon = true, iconSize = 24, iconPosition = "LEFT", autoSizeIcon = true,
     showSpellName = true, showTimeRemaining = true, font = NAOWH_FONT, fontSize = 12,
     textColorR = 1, textColorG = 1, textColorB = 1, hideFriendlyCasts = false,
     showEmpowerStages = true, showShieldIcon = true, showInterruptTick = true, tickColorR = 1, tickColorG = 1, tickColorB = 1, tickColorUseClassColor = false, colorNonInterrupt = true,

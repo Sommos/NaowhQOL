@@ -277,6 +277,7 @@ ns:RegisterLocale("frFR", {
     FOCUS_BG_OPACITY = "Opacité du fond",
     FOCUS_SECTION_ICON = "ICÔNE",
     FOCUS_SHOW_ICON = "Afficher l'icône de sort",
+    FOCUS_AUTO_SIZE_ICON = "Ajuster l'icône à la barre",
     FOCUS_ICON_POS = "Position de l'icône",
     FOCUS_SECTION_TEXT = "TEXTE",
     FOCUS_SHOW_NAME = "Afficher le nom du sort",

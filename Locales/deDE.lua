@@ -277,6 +277,7 @@ ns:RegisterLocale("deDE", {
     FOCUS_BG_OPACITY = "Hintergrundtransparenz",
     FOCUS_SECTION_ICON = "SYMBOL",
     FOCUS_SHOW_ICON = "Zaubersymbol anzeigen",
+    FOCUS_AUTO_SIZE_ICON = "Symbol automatisch an Leiste anpassen",
     FOCUS_ICON_POS = "Symbolposition",
     FOCUS_SECTION_TEXT = "TEXT",
     FOCUS_SHOW_NAME = "Zaubernamen anzeigen",

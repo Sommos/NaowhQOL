@@ -277,6 +277,7 @@ ns:RegisterLocale("zhTW", {
     FOCUS_BG_OPACITY = "背景透明度",
     FOCUS_SECTION_ICON = "圖示",
     FOCUS_SHOW_ICON = "顯示法術圖示",
+    FOCUS_AUTO_SIZE_ICON = "圖示自動適配施法條",
     FOCUS_ICON_POS = "圖示位置",
     FOCUS_SECTION_TEXT = "文字",
     FOCUS_SHOW_NAME = "顯示法術名稱",

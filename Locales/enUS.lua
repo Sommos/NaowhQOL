@@ -277,6 +277,7 @@ ns:RegisterLocale("enUS", {
     FOCUS_BG_OPACITY = "Background Opacity",
     FOCUS_SECTION_ICON = "ICON",
     FOCUS_SHOW_ICON = "Show Spell Icon",
+    FOCUS_AUTO_SIZE_ICON = "Auto-Size Icon to Bar",
     FOCUS_ICON_POS = "Icon Position",
     FOCUS_SECTION_TEXT = "TEXT",
     FOCUS_SHOW_NAME = "Show Spell Name",

@@ -280,6 +280,7 @@ ns:RegisterLocale("zhCN", {
     FOCUS_BG_OPACITY = "背景透明度",
     FOCUS_SECTION_ICON = "图标",
     FOCUS_SHOW_ICON = "显示技能图标",
+    FOCUS_AUTO_SIZE_ICON = "图标自动适配施法条",
     FOCUS_ICON_POS = "图标位置",
     FOCUS_SECTION_TEXT = "文字",
     FOCUS_SHOW_NAME = "显示技能名称",

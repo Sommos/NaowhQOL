@@ -277,6 +277,7 @@ ns:RegisterLocale("ruRU", {
     FOCUS_BG_OPACITY = "Прозрачность фона",
     FOCUS_SECTION_ICON = "ИКОНКА",
     FOCUS_SHOW_ICON = "Показывать иконку заклинания",
+    FOCUS_AUTO_SIZE_ICON = "Авторазмер иконки под полосу",
     FOCUS_ICON_POS = "Позиция иконки",
     FOCUS_SECTION_TEXT = "ТЕКСТ",
     FOCUS_SHOW_NAME = "Показывать название заклинания",

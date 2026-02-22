@@ -35,7 +35,7 @@ borderFrame:SetBackdrop({
 })
 borderFrame:SetBackdropBorderColor(0, 0, 0, 1)
 
--- Background
+-- Background (anchored to progressBar area, set in UpdateLayout)
 local bgTexture = castBarFrame:CreateTexture(nil, "BACKGROUND")
 bgTexture:SetAllPoints()
 bgTexture:SetTexture([[Interface\Buttons\WHITE8X8]])
@@ -72,15 +72,9 @@ local iconFrame = CreateFrame("Frame", nil, castBarFrame)
 iconFrame:SetSize(24, 24)
 iconFrame:SetPoint("LEFT", castBarFrame, "LEFT", 0, 0)
 
-local iconBg = iconFrame:CreateTexture(nil, "BACKGROUND")
-iconBg:SetAllPoints()
-iconBg:SetTexture([[Interface\Buttons\WHITE8X8]])
-iconBg:SetVertexColor(0, 0, 0, 0.8)
-
 local iconTexture = iconFrame:CreateTexture(nil, "ARTWORK")
-iconTexture:SetPoint("TOPLEFT", iconFrame, "TOPLEFT", 1, -1)
-iconTexture:SetPoint("BOTTOMRIGHT", iconFrame, "BOTTOMRIGHT", -1, 1)
-iconTexture:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+iconTexture:SetAllPoints()
+iconTexture:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 
 -- Shield icon for non-interruptible casts (using Blizzard atlas)
 local shieldIcon = castBarFrame:CreateTexture(nil, "OVERLAY")
@@ -280,47 +274,54 @@ local function UpdateLayout()
     local db = NaowhQOL.focusCastBar
     if not db then return end
 
-    local iconSize = db.iconSize or 24
     local showIcon = db.showIcon
     local iconPos = db.iconPosition or "LEFT"
 
-    iconFrame:SetSize(iconSize, iconSize)
+    -- Determine icon size: auto-size to bar dimension or use manual size
+    local iconW, iconH
+    if db.autoSizeIcon then
+        -- Use live frame size (important during resize drag when db hasn't saved yet)
+        local barW = castBarFrame:GetWidth()
+        local barH = castBarFrame:GetHeight()
+        if iconPos == "LEFT" or iconPos == "RIGHT" then
+            -- Height matches the bar, width = height + 1% of bar width on each side
+            iconH = barH
+            iconW = barH + math.floor(barW * 0.02)
+        else
+            -- Width matches the bar, height = width + 1% of bar height on each side
+            iconW = barW
+            iconH = barW + math.floor(barH * 0.02)
+        end
+    else
+        local s = db.iconSize or 24
+        iconW = s
+        iconH = s
+    end
+
+    iconFrame:SetSize(iconW, iconH)
+
+    -- Progress bar always fills the entire castBarFrame
+    progressBar:ClearAllPoints()
+    progressBar:SetAllPoints(castBarFrame)
 
     if showIcon then
         iconFrame:Show()
         iconFrame:ClearAllPoints()
-        progressBar:ClearAllPoints()
 
+        -- Icon is always positioned OUTSIDE the cast bar frame
         if iconPos == "LEFT" then
-            iconFrame:SetPoint("LEFT", castBarFrame, "LEFT", 0, 0)
-            progressBar:SetPoint("LEFT", iconFrame, "RIGHT", 1, 0)
-            progressBar:SetPoint("RIGHT", castBarFrame, "RIGHT", 0, 0)
-            progressBar:SetPoint("TOP", castBarFrame, "TOP", 0, 0)
-            progressBar:SetPoint("BOTTOM", castBarFrame, "BOTTOM", 0, 0)
+            iconFrame:SetPoint("RIGHT", castBarFrame, "LEFT", -1, 0)
         elseif iconPos == "RIGHT" then
-            iconFrame:SetPoint("RIGHT", castBarFrame, "RIGHT", 0, 0)
-            progressBar:SetPoint("LEFT", castBarFrame, "LEFT", 0, 0)
-            progressBar:SetPoint("RIGHT", iconFrame, "LEFT", -1, 0)
-            progressBar:SetPoint("TOP", castBarFrame, "TOP", 0, 0)
-            progressBar:SetPoint("BOTTOM", castBarFrame, "BOTTOM", 0, 0)
+            iconFrame:SetPoint("LEFT", castBarFrame, "RIGHT", 1, 0)
         elseif iconPos == "TOP" then
             iconFrame:SetPoint("BOTTOM", castBarFrame, "TOP", 0, 1)
-            progressBar:SetAllPoints(castBarFrame)
         elseif iconPos == "BOTTOM" then
             iconFrame:SetPoint("TOP", castBarFrame, "BOTTOM", 0, -1)
-            progressBar:SetAllPoints(castBarFrame)
         else
-            -- Default to LEFT
-            iconFrame:SetPoint("LEFT", castBarFrame, "LEFT", 0, 0)
-            progressBar:SetPoint("LEFT", iconFrame, "RIGHT", 1, 0)
-            progressBar:SetPoint("RIGHT", castBarFrame, "RIGHT", 0, 0)
-            progressBar:SetPoint("TOP", castBarFrame, "TOP", 0, 0)
-            progressBar:SetPoint("BOTTOM", castBarFrame, "BOTTOM", 0, 0)
+            iconFrame:SetPoint("RIGHT", castBarFrame, "LEFT", -1, 0)
         end
     else
         iconFrame:Hide()
-        progressBar:ClearAllPoints()
-        progressBar:SetAllPoints(castBarFrame)
     end
 
     -- Update background color
