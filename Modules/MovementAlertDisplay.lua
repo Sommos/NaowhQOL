@@ -101,7 +101,7 @@ movementFrame:Hide()
 -- Text display (for text mode)
 local movementText = movementFrame:CreateFontString(nil, "OVERLAY")
 movementText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 24, "OUTLINE")
-movementText:SetPoint("LEFT", 10, 0)
+movementText:SetPoint("CENTER")
 
 -- Icon display (for icon mode)
 local movementIcon = CreateFrame("Frame", nil, movementFrame)
@@ -162,7 +162,7 @@ timeSpiralFrame:Hide()
 
 local timeSpiralText = timeSpiralFrame:CreateFontString(nil, "OVERLAY")
 timeSpiralText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 24, "OUTLINE")
-timeSpiralText:SetPoint("LEFT", 10, 0)
+timeSpiralText:SetPoint("CENTER")
 
 local timeSpiralResizeHandle
 local timeSpiralActiveTime = nil
@@ -180,7 +180,7 @@ gatewayFrame:Hide()
 
 local gatewayText = gatewayFrame:CreateFontString(nil, "OVERLAY")
 gatewayText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 24, "OUTLINE")
-gatewayText:SetPoint("LEFT", 10, 0)
+gatewayText:SetPoint("CENTER")
 
 local gatewayResizeHandle
 local lastGatewayUsable = false
