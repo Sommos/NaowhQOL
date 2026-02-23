@@ -845,6 +845,7 @@ ns:RegisterLocale("ruRU", {
     BWV2_OTHER = "Другое:",
     BWV2_MIN = "мин.",
     BWV2_SECTION_RAID = "РЕЙДОВЫЕ БАФФЫ",
+	BWV2_SECTION_PRESENCE = "НАЛИЧИЕ БАФФОВ",
     BWV2_SECTION_CONSUMABLES = "РАСХОДНИКИ",
     BWV2_SECTION_INVENTORY = "ПРОВЕРКА ИНВЕНТАРЯ",
     BWV2_SECTION_CLASS = "КЛАССОВЫЕ БАФФЫ",
@@ -994,10 +995,16 @@ ns:RegisterLocale("ruRU", {
     IMPORTEXPORT_INVALID        = "Недопустимая строка.",
     IMPORTEXPORT_PASTE_FIRST    = "Сначала вставьте строку.",
     IMPORTEXPORT_IMPORT_OK      = "Импорт выполнен успешно!",
+	IMPORTEXPORT_IMPORT_OK_PROFILE = "Импортировано в новый профиль: %s",
     IMPORTEXPORT_IMPORT_ERR     = "Ошибка импорта.",
     IMPORTEXPORT_POPUP_RENAME   = "Переименовать профиль '%s' в:",
     IMPORTEXPORT_POPUP_NEW      = "Создать новый профиль с настройками по умолчанию:",
+	IMPORTEXPORT_POPUP_IMPORT   = "Введите имя для нового профиля, который будет импортирован:",
     IMPORTEXPORT_POPUP_DELETE   = "Удалить профиль '%s'?",
+	IMPORTEXPORT_POPUP_RESET    = "Сбросить профиль по умолчанию до заводских настроек?\n\nЭто отключит ВСЕ функции и сбросит все цвета/положения. Требуется перезагрузка.",
+    IMPORTEXPORT_RESET_BTN      = "Сбросить до значений по умолчанию",
+    IMPORTEXPORT_RESET_OK       = "Сброс профиля по умолчанию - перезагрузите, чтобы применить изменения.",
+    IMPORTEXPORT_RESET_ERR_NAMED = "Сброс работает только для профиля по умолчанию.",
 
     ---------------------------------------------------------------------------
     -- COMBAT LOGGER (CONFIG)
