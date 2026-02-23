@@ -792,19 +792,26 @@ local function InitializeDB()
     -- This must happen after migration so the profile data is already in place.
     if NaowhQOL_Profiles and NaowhQOL_Profiles.activeProfile then
         local target = NaowhQOL_Profiles.activeProfile
-        local profiles = ns.db:GetProfiles({})
-        -- Ensure the profile exists in AceDB (may have been stripped if all-defaults)
-        ns.db:SetProfile(target)
-        -- Apply snapshot data over whatever AceDB loaded.
-        -- Use deepCopy so the live profile shares no table references with the
-        -- stored snapshot — mutations to ns.db.profile won't corrupt the snapshot.
+
+        -- Only restore if the profile still has snapshot data.
+        -- If profileData[target] was removed (e.g. the profile was deleted),
+        -- skip restoration so we don't accidentally re-create it.
         local snap = NaowhQOL_Profiles.profileData and NaowhQOL_Profiles.profileData[target]
         if snap then
+            local profiles = ns.db:GetProfiles({})
+            -- Ensure the profile exists in AceDB (may have been stripped if all-defaults)
+            ns.db:SetProfile(target)
+            -- Apply snapshot data over whatever AceDB loaded.
+            -- Use deepCopy so the live profile shares no table references with the
+            -- stored snapshot — mutations to ns.db.profile won't corrupt the snapshot.
             for k, v in pairs(snap) do
                 ns.db.profile[k] = deepCopy(v)
             end
+            NaowhQOL = ns.db.profile
+        else
+            -- Snapshot was removed (profile deleted); clear stale activeProfile
+            NaowhQOL_Profiles.activeProfile = nil
         end
-        NaowhQOL = ns.db.profile
     end
 
     -- Initialize locale (always follow the WoW client locale, never a saved value)

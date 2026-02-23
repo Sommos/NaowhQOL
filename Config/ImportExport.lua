@@ -717,11 +717,38 @@ function ns:InitImportExport()
                             if cb:GetChecked() then selected[key] = true end
                         end
                         local raw = strtrim(importBox:GetText())
-                        local ok, err = ns.SettingsIO:Import(raw, selected)
-                        if ok then
-                            statusText:SetText("|cff44ff44" .. L["IMPORTEXPORT_IMPORT_OK"] .. "|r")
-                        else
-                            statusText:SetText("|cffff4444" .. (err or L["IMPORTEXPORT_IMPORT_ERR"]) .. "|r")
+
+                        -- Prompt for a new profile name so imported settings
+                        -- don't overwrite the current profile.
+                        local dialog = StaticPopup_Show("NAOWH_QOL_PROFILE_NAME", L["IMPORTEXPORT_POPUP_IMPORT"])
+                        if dialog then
+                            dialog.data = {
+                                default = "",
+                                callback = function(newName)
+                                    -- Prevent overwriting an existing profile
+                                    local profiles = ns.SettingsIO:GetProfileList()
+                                    for _, pname in ipairs(profiles) do
+                                        if pname == newName then
+                                            statusText:SetText("|cffff4444" .. L["IMPORTEXPORT_ERR_EXISTS"] .. "|r")
+                                            return
+                                        end
+                                    end
+
+                                    -- Create the new profile, import into it, then save
+                                    ns.SettingsIO:CreateDefaultProfile(newName)
+                                    local ok, err = ns.SettingsIO:Import(raw, selected)
+                                    if ok then
+                                        ns.SettingsIO:SaveProfile(newName)
+                                        RefreshProfileDropdown()
+                                        if RefreshSpecDropdowns then RefreshSpecDropdowns() end
+                                        UpdateProfileStatus()
+                                        statusText:SetText("|cff44ff44" .. string.format(L["IMPORTEXPORT_IMPORT_OK_PROFILE"], newName) .. "|r")
+                                        StaticPopup_Show("NAOWH_QOL_RELOAD")
+                                    else
+                                        statusText:SetText("|cffff4444" .. (err or L["IMPORTEXPORT_IMPORT_ERR"]) .. "|r")
+                                    end
+                                end
+                            }
                         end
                     end
                 })

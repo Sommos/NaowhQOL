@@ -2,9 +2,14 @@ local addonName, ns = ...
 
 local ADDON_FONT_DIR = "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\"
 
+-- Pick the correct Naowh font variant based on client locale
+local locale = GetLocale()
+local isAsiaLocale = (locale == "koKR" or locale == "zhCN" or locale == "zhTW")
+local naowhFontFile = isAsiaLocale and "NaowhAsia.ttf" or "Naowh.ttf"
+
 -- Custom fonts shipped with the addon (drop font files in Assets/Fonts and add a line here)
 local custom = {
-    { name = "Naowh", file = "Naowh.ttf" },
+    { name = "Naowh", file = naowhFontFile },
     { name = "Metropolis ExtraBold", file = "Metropolis-ExtraBold.otf" },
 }
 

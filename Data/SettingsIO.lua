@@ -811,10 +811,28 @@ function ns.SettingsIO:DeleteProfile(name)
     if current == name then
         local profiles = self:GetProfileList()
         for _, pname in ipairs(profiles) do
-            if pname ~= name then ns.db:SetProfile(pname); break end
+            if pname ~= name then
+                ns.db:SetProfile(pname)
+                -- Update activeProfile so the deleted profile isn't
+                -- re-created on reload by InitializeDB.
+                if NaowhQOL_Profiles then
+                    NaowhQOL_Profiles.activeProfile = pname
+                end
+                break
+            end
         end
     end
     pcall(function() ns.db:DeleteProfile(name, true) end)
+
+    -- Clean any spec-profile references that pointed at the deleted profile
+    if ns.db and ns.db.char and ns.db.char.specProfiles then
+        for specIndex, specData in pairs(ns.db.char.specProfiles) do
+            if specData.profile == name then
+                specData.profile = nil
+                specData.enabled = false
+            end
+        end
+    end
 
     return true
 end
