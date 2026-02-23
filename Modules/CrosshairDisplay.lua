@@ -19,7 +19,7 @@ local DEFAULT_MELEE_SPELLS = {
     PALADIN = { nil, 96231, 96231 },
     ROGUE = { 1752, 1752, 1752 },
     SHAMAN = { nil, 73899, nil },
-    WARRIOR = { 1464, 1464, 1464 },
+    WARRIOR = { 6552, 6552, 6552 },
 }
 
 local cachedMeleeSpellId = nil
