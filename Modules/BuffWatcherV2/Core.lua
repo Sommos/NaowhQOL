@@ -221,6 +221,9 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
         end
 
     elseif event == "PLAYER_LOGIN" then
+        -- Localize spec names now that API is available
+        Categories:LocalizeSpecNames()
+
         -- Initialize saved variables
         BWV2:InitSavedVars()
 

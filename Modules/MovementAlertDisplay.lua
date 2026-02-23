@@ -479,8 +479,8 @@ local function ShowMovementDisplay(cdInfo)
     if displayMode == "text" then
         -- Text mode: convert format to use %s placeholder, then pass secret value to SetFormattedText
         -- Cannot use gsub with secret string as replacement - must pass directly to API
-        local textFormat = db.textFormat or "No %a - %ts"
-        local fmtStr = textFormat:gsub("%%a", spellName):gsub("%%t", "%%s")
+        local textFormat = db.textFormat or "%ts\nNo %a"
+        local fmtStr = textFormat:gsub("\\n", "\n"):gsub("%%a", spellName):gsub("%%t", "%%s")
         movementText:SetFormattedText(fmtStr, string.format("%." .. precision .. "f", cdInfo.timeUntilEndOfStartRecovery))
         movementText:Show()
     elseif displayMode == "icon" then
@@ -492,8 +492,8 @@ local function ShowMovementDisplay(cdInfo)
             movementIcon:Show()
         else
             -- Fallback to text if no icon
-            local textFormat = db.textFormat or "No %a - %ts"
-            local fmtStr = textFormat:gsub("%%a", spellName):gsub("%%t", "%%s")
+            local textFormat = db.textFormat or "%ts\nNo %a"
+            local fmtStr = textFormat:gsub("\\n", "\n"):gsub("%%a", spellName):gsub("%%t", "%%s")
             movementText:SetFormattedText(fmtStr, string.format("%." .. precision .. "f", cdInfo.timeUntilEndOfStartRecovery))
             movementText:Show()
         end
@@ -537,6 +537,14 @@ CheckMovementCooldown = function()
     -- Skip if combat-only and not in combat
     if db.combatOnly and not inCombat and not db.unlock then
         if DEBUG_MODE then print("[MovementAlert] Combat-only mode, not in combat") end
+        HideMovementDisplay()
+        return
+    end
+
+    -- Skip if current class is disabled
+    local playerClass = select(2, UnitClass("player"))
+    if db.disabledClasses and db.disabledClasses[playerClass] then
+        if DEBUG_MODE then print("[MovementAlert] Class disabled:", playerClass) end
         HideMovementDisplay()
         return
     end

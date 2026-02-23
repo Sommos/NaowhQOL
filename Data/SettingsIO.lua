@@ -177,6 +177,7 @@ local TYPE_SCHEMAS = {
         precision = "number", pollRate = "number",
         point = "string", x = "number", y = "number", width = "number", height = "number",
         combatOnly = "boolean",
+        disabledClasses = "table",
         tsEnabled = "boolean", tsUnlock = "boolean",
         tsText = "string", tsColorR = "number", tsColorG = "number", tsColorB = "number",
         tsPoint = "string", tsX = "number", tsY = "number", tsWidth = "number", tsHeight = "number",

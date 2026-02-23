@@ -57,9 +57,64 @@ function ns:InitMovementAlert()
         })
         combatOnlyCB:SetShown(db.enabled)
 
+        -- Class filter section
+        if not db.disabledClasses then db.disabledClasses = {} end
+
+        local classFilterFrame = CreateFrame("Frame", nil, sc)
+        classFilterFrame:SetSize(460, 120)
+        classFilterFrame:SetPoint("TOPLEFT", killArea, "BOTTOMLEFT", 0, -6)
+
+        local classFilterLabel = classFilterFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        classFilterLabel:SetPoint("TOPLEFT", 15, -2)
+        classFilterLabel:SetText(L["MOVEMENT_ALERT_CLASS_FILTER"])
+        classFilterLabel:SetTextColor(0.8, 0.8, 0.8)
+
+        local CLASS_ORDER = {
+            "DEATHKNIGHT", "DEMONHUNTER", "DRUID", "EVOKER", "HUNTER",
+            "MAGE", "MONK", "PALADIN", "PRIEST", "ROGUE",
+            "SHAMAN", "WARLOCK", "WARRIOR",
+        }
+        local COLS = 3
+        local COL_W = 150
+        local ROW_H = 22
+        local classCheckboxes = {}
+
+        for i, classToken in ipairs(CLASS_ORDER) do
+            local col = ((i - 1) % COLS)
+            local row = math.floor((i - 1) / COLS)
+            local xOff = 15 + col * COL_W
+            local yOff = -18 - row * ROW_H
+
+            local isEnabled = not db.disabledClasses[classToken]
+            local classColor = C_ClassColor.GetClassColor(classToken)
+            local localizedName = LOCALIZED_CLASS_NAMES_MALE[classToken] or classToken
+            local coloredName = classColor and classColor:WrapTextInColorCode(localizedName) or localizedName
+
+            local cb = W:CreateCheckbox(classFilterFrame, {
+                label = coloredName,
+                x = xOff, y = yOff,
+                template = "ChatConfigCheckButtonTemplate",
+                onChange = function(checked)
+                    if checked then
+                        db.disabledClasses[classToken] = nil
+                    else
+                        db.disabledClasses[classToken] = true
+                    end
+                    refreshMovement()
+                end
+            })
+            cb:SetChecked(isEnabled)
+            cb:SetShown(db.enabled)
+            classCheckboxes[#classCheckboxes + 1] = cb
+        end
+
+        local totalRows = math.ceil(#CLASS_ORDER / COLS)
+        classFilterFrame:SetHeight(20 + totalRows * ROW_H + 6)
+        classFilterFrame:SetShown(db.enabled)
+
         -- Movement sections container
         local movementSections = CreateFrame("Frame", nil, sc)
-        movementSections:SetPoint("TOPLEFT", killArea, "BOTTOMLEFT", 0, -10)
+        movementSections:SetPoint("TOPLEFT", classFilterFrame, "BOTTOMLEFT", 0, -4)
         movementSections:SetPoint("RIGHT", sc, "RIGHT", -10, 0)
         movementSections:SetHeight(300)
 
@@ -126,7 +181,7 @@ function ns:InitMovementAlert()
 
         W:CreateTextInput(textFormatRow, {
             label = L["MOVEMENT_ALERT_TEXT_FORMAT"], db = db, key = "textFormat",
-            default = "No %a - %ts", x = 0, y = 0, width = 200,
+            default = "%ts\\nNo %a", x = 0, y = 0, width = 200,
             onChange = refreshMovement
         })
 
@@ -428,7 +483,8 @@ function ns:InitMovementAlert()
             gwSections:SetHeight(math.max(gwH, 1))
 
             -- Total scroll height
-            local totalH = 75 + 90 + 10 + movementH + 20 + 62 + 10 + tsH + 20 + 90 + 10 + gwH + 40
+            local classFilterH = db.enabled and classFilterFrame:GetHeight() or 0
+            local totalH = 75 + 90 + classFilterH + 10 + movementH + 20 + 62 + 10 + tsH + 20 + 90 + 10 + gwH + 40
             sc:SetHeight(math.max(totalH, 800))
         end
 
@@ -437,6 +493,8 @@ function ns:InitMovementAlert()
             refreshMovement()
             unlockCB:SetShown(db.enabled)
             combatOnlyCB:SetShown(db.enabled)
+            classFilterFrame:SetShown(db.enabled)
+            for _, cb in ipairs(classCheckboxes) do cb:SetShown(db.enabled) end
             movementSections:SetShown(db.enabled)
             RelayoutAll()
         end)

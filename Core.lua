@@ -147,13 +147,14 @@ local MOVEMENT_ALERT_DEFAULTS = {
     -- Movement Cooldown sub-feature
     enabled = false, unlock = false, font = NAOWH_FONT,
     displayMode = "text",  -- "text", "icon", "bar"
-    textFormat = "No %a - %ts",  -- %a = ability name, %t = time
+    textFormat = "%ts\nNo %a",  -- %a = ability name, %t = time, \n = new line
     barShowIcon = true,
     textColorR = 1, textColorG = 1, textColorB = 1,
     precision = 1,
     pollRate = 100,  -- ms between countdown updates
     point = "CENTER", x = 0, y = 50, width = 200, height = 40,
     combatOnly = false,
+    disabledClasses = {},
     -- Time Spiral sub-feature
     tsEnabled = false, tsUnlock = false,
     tsText = "FREE MOVEMENT", tsColorR = 0.53, tsColorG = 1, tsColorB = 0,

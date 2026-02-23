@@ -22,21 +22,36 @@ Categories.RAID = {
 }
 
 -- Class info with spec IDs for class-specific buff checks
+-- Class names use LOCALIZED_CLASS_NAMES_MALE for proper localization
+-- Spec names are resolved lazily via GetSpecializationInfoByID at runtime
 Categories.CLASS_INFO = {
-    WARRIOR     = { name = "Warrior",      specs = {{71, "Arms"}, {72, "Fury"}, {73, "Protection"}} },
-    PALADIN     = { name = "Paladin",      specs = {{65, "Holy"}, {66, "Protection"}, {70, "Retribution"}} },
-    HUNTER      = { name = "Hunter",       specs = {{253, "Beast Mastery"}, {254, "Marksmanship"}, {255, "Survival"}} },
-    ROGUE       = { name = "Rogue",        specs = {{259, "Assassination"}, {260, "Outlaw"}, {261, "Subtlety"}} },
-    PRIEST      = { name = "Priest",       specs = {{256, "Discipline"}, {257, "Holy"}, {258, "Shadow"}} },
-    DEATHKNIGHT = { name = "Death Knight", specs = {{250, "Blood"}, {251, "Frost"}, {252, "Unholy"}} },
-    SHAMAN      = { name = "Shaman",       specs = {{262, "Elemental"}, {263, "Enhancement"}, {264, "Restoration"}} },
-    MAGE        = { name = "Mage",         specs = {{62, "Arcane"}, {63, "Fire"}, {64, "Frost"}} },
-    WARLOCK     = { name = "Warlock",      specs = {{265, "Affliction"}, {266, "Demonology"}, {267, "Destruction"}} },
-    MONK        = { name = "Monk",         specs = {{268, "Brewmaster"}, {269, "Windwalker"}, {270, "Mistweaver"}} },
-    DRUID       = { name = "Druid",        specs = {{102, "Balance"}, {103, "Feral"}, {104, "Guardian"}, {105, "Restoration"}} },
-    DEMONHUNTER = { name = "Demon Hunter", specs = {{577, "Havoc"}, {581, "Vengeance"}} },
-    EVOKER      = { name = "Evoker",       specs = {{1467, "Devastation"}, {1468, "Preservation"}, {1473, "Augmentation"}} },
+    WARRIOR     = { name = LOCALIZED_CLASS_NAMES_MALE["WARRIOR"]     or "Warrior",      specs = {{71, "Arms"}, {72, "Fury"}, {73, "Protection"}} },
+    PALADIN     = { name = LOCALIZED_CLASS_NAMES_MALE["PALADIN"]     or "Paladin",      specs = {{65, "Holy"}, {66, "Protection"}, {70, "Retribution"}} },
+    HUNTER      = { name = LOCALIZED_CLASS_NAMES_MALE["HUNTER"]      or "Hunter",       specs = {{253, "Beast Mastery"}, {254, "Marksmanship"}, {255, "Survival"}} },
+    ROGUE       = { name = LOCALIZED_CLASS_NAMES_MALE["ROGUE"]       or "Rogue",        specs = {{259, "Assassination"}, {260, "Outlaw"}, {261, "Subtlety"}} },
+    PRIEST      = { name = LOCALIZED_CLASS_NAMES_MALE["PRIEST"]      or "Priest",       specs = {{256, "Discipline"}, {257, "Holy"}, {258, "Shadow"}} },
+    DEATHKNIGHT = { name = LOCALIZED_CLASS_NAMES_MALE["DEATHKNIGHT"] or "Death Knight", specs = {{250, "Blood"}, {251, "Frost"}, {252, "Unholy"}} },
+    SHAMAN      = { name = LOCALIZED_CLASS_NAMES_MALE["SHAMAN"]      or "Shaman",       specs = {{262, "Elemental"}, {263, "Enhancement"}, {264, "Restoration"}} },
+    MAGE        = { name = LOCALIZED_CLASS_NAMES_MALE["MAGE"]        or "Mage",         specs = {{62, "Arcane"}, {63, "Fire"}, {64, "Frost"}} },
+    WARLOCK     = { name = LOCALIZED_CLASS_NAMES_MALE["WARLOCK"]     or "Warlock",      specs = {{265, "Affliction"}, {266, "Demonology"}, {267, "Destruction"}} },
+    MONK        = { name = LOCALIZED_CLASS_NAMES_MALE["MONK"]        or "Monk",         specs = {{268, "Brewmaster"}, {269, "Windwalker"}, {270, "Mistweaver"}} },
+    DRUID       = { name = LOCALIZED_CLASS_NAMES_MALE["DRUID"]       or "Druid",        specs = {{102, "Balance"}, {103, "Feral"}, {104, "Guardian"}, {105, "Restoration"}} },
+    DEMONHUNTER = { name = LOCALIZED_CLASS_NAMES_MALE["DEMONHUNTER"] or "Demon Hunter", specs = {{577, "Havoc"}, {581, "Vengeance"}} },
+    EVOKER      = { name = LOCALIZED_CLASS_NAMES_MALE["EVOKER"]      or "Evoker",       specs = {{1467, "Devastation"}, {1468, "Preservation"}, {1473, "Augmentation"}} },
 }
+
+-- Resolve spec names to localized versions once player data is available
+function Categories:LocalizeSpecNames()
+    for _, classInfo in pairs(self.CLASS_INFO) do
+        for _, specData in ipairs(classInfo.specs) do
+            local specID = specData[1]
+            local localizedName = select(2, GetSpecializationInfoByID(specID))
+            if localizedName then
+                specData[2] = localizedName
+            end
+        end
+    end
+end
 
 -- Ordered list for consistent UI display
 Categories.CLASS_ORDER = {
