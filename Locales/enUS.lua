@@ -730,6 +730,21 @@ ns:RegisterLocale("enUS", {
     MOUSE_TRAIL_ENABLE = "Enable Mouse Trail",
     MOUSE_TRAIL_DURATION = "Trail Duration",
     MOUSE_TRAIL_COLOR = "Color",
+    MOUSE_SECTION_DETECTION = "DETECTION",
+    MOUSE_MELEE_ENABLE = "Enable Melee Range Indicator",
+    MOUSE_RECOLOR_BORDER = "Recolor Border",
+    MOUSE_RECOLOR_RING = "Recolor Ring",
+    MOUSE_BORDER_ENABLE = "Enable Border",
+    MOUSE_BORDER_COLOR = "Border Color",
+    MOUSE_BORDER_WEIGHT = "Border Weight",
+    MOUSE_SOUND_ENABLE = "Enable Sound Alert",
+    MOUSE_SOUND_INTERVAL = "Repeat Interval (sec)",
+    MOUSE_SPELL_ID = "Range Check Spell ID",
+    MOUSE_SPELL_CURRENT = "Current: %s",
+    MOUSE_SPELL_UNSUPPORTED = "Not supported for this spec",
+    MOUSE_SPELL_NONE = "No spell configured",
+    MOUSE_RESET_SPELL = "Reset to Default",
+    MOUSE_HPAL_NOTE = "HPal uses 4yd item detection (~0.5yd variance)",
 
     ---------------------------------------------------------------------------
     -- CROSSHAIR
