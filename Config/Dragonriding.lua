@@ -47,6 +47,7 @@ function ns:InitDragonriding()
             db = db, key = "unlocked",
             x = 15, y = -38,
             template = "ChatConfigCheckButtonTemplate",
+            onChange = drRefresh,
         })
         unlockCB:SetShown(db.enabled)
 

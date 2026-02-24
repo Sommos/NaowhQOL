@@ -70,7 +70,7 @@ local uiBuilt = false
 local stashedPosition = nil
 
 local mainFrame
-local speedBar, speedText, thrillTick
+local speedBar, speedText, speedTextFrame, thrillTick
 local chargeBars = {}
 local chargeDividers = {}
 local secondWindBars = {}
@@ -258,10 +258,25 @@ local function UpdateLayout()
     speedBar:SetSize(totalWidth, speedHeight)
     speedBar:SetPoint("TOPLEFT", mainFrame, "TOPLEFT", borderSize, speedY)
 
-    speedText:SetShown(Get("showSpeedText"))
     speedText:SetFont(ns.Media.ResolveFont(Get("speedFont")), Get("speedFontSize"), "OUTLINE")
-    speedText:ClearAllPoints()
-    speedText:SetPoint("RIGHT", mainFrame, "RIGHT", Get("speedTextOffsetX"), Get("speedTextOffsetY"))
+    local fontSize = Get("speedFontSize")
+    speedTextFrame:SetSize(math.max(44, fontSize * 2.5), math.max(24, fontSize + 12))
+    speedTextFrame:ClearAllPoints()
+    speedTextFrame:SetPoint("RIGHT", mainFrame, "RIGHT", Get("speedTextOffsetX"), Get("speedTextOffsetY"))
+    speedTextFrame:SetShown(Get("showSpeedText"))
+    speedTextFrame:EnableMouse(Get("unlocked"))
+    if Get("unlocked") and Get("showSpeedText") then
+        speedTextFrame:SetBackdrop({
+            bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+            edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+            tile = true, tileSize = 16, edgeSize = 16,
+            insets = { left = 4, right = 4, top = 4, bottom = 4 }
+        })
+        speedTextFrame:SetBackdropColor(0.1, 0.1, 0.1, 0.8)
+        speedTextFrame:SetBackdropBorderColor(0.4, 0.4, 0.4, 1)
+    else
+        speedTextFrame:SetBackdrop(nil)
+    end
 
     -- Position thrill tick marker
     if thrillTick then
@@ -457,6 +472,7 @@ local OnUpdate = ns.PerfMonitor:Wrap("Dragonriding", function(self, dt)
     if not IsEnabled() or not IsSkyriding() then
         mainFrame:SetAlpha(0)
         mainFrame:Hide()
+        if speedTextFrame then speedTextFrame:Hide() end
         eventFrame:SetScript("OnUpdate", nil)
         prevSpeed = 0
         lastColorState = nil
@@ -474,6 +490,7 @@ local OnUpdate = ns.PerfMonitor:Wrap("Dragonriding", function(self, dt)
     if Get("hideWhenGroundedFull") and not IsGliding() and charges >= maxCharges then
         mainFrame:SetAlpha(0)
         mainFrame:Hide()
+        if speedTextFrame then speedTextFrame:Hide() end
         eventFrame:SetScript("OnUpdate", nil)
         if Get("hideCdmWhileMounted") then
             ShowCooldownManager()
@@ -486,6 +503,7 @@ local OnUpdate = ns.PerfMonitor:Wrap("Dragonriding", function(self, dt)
 
     mainFrame:Show()
     mainFrame:SetAlpha(1)
+    if speedTextFrame and Get("showSpeedText") then speedTextFrame:Show() end
 
     if Get("hideCdmWhileMounted") then
         HideCooldownManager()
@@ -563,15 +581,41 @@ local function BuildUI()
     thrillTick = speedBar:CreateTexture(nil, "OVERLAY")
     thrillTick:SetColorTexture(0.01, 0.56, 0.91, 1)
 
-    local speedTextFrame = CreateFrame("Frame", nil, mainFrame)
-    speedTextFrame:SetAllPoints()
+    speedTextFrame = CreateFrame("Frame", "NaowhQOL_DragonridingSpeedText", UIParent, "BackdropTemplate")
+    speedTextFrame:SetFrameStrata("MEDIUM")
     speedTextFrame:SetFrameLevel(mainFrame:GetFrameLevel() + 10)
+    speedTextFrame:SetSize(44, 24)
+    speedTextFrame:SetClampedToScreen(true)
+    speedTextFrame:SetMovable(true)
+    speedTextFrame:RegisterForDrag("LeftButton")
+
+    speedTextFrame:SetScript("OnDragStart", function(self)
+        if db.unlocked then
+            self:StartMoving()
+        end
+    end)
+
+    speedTextFrame:SetScript("OnDragStop", function(self)
+        self:StopMovingOrSizing()
+        local cx, cy = self:GetCenter()
+        local fw = self:GetWidth()
+        local mx, my = mainFrame:GetCenter()
+        local mw = mainFrame:GetWidth()
+        if cx and cy and mx and my then
+            local frameRight = cx + fw / 2
+            local mainRight = mx + mw / 2
+            db.speedTextOffsetX = math.floor(frameRight - mainRight)
+            db.speedTextOffsetY = math.floor(cy - my)
+        end
+        self:ClearAllPoints()
+        self:SetPoint("RIGHT", mainFrame, "RIGHT", Get("speedTextOffsetX"), Get("speedTextOffsetY"))
+    end)
 
     speedText = speedTextFrame:CreateFontString(nil, "OVERLAY")
     speedText:SetFont(ns.Media.ResolveFont(Get("speedFont")), Get("speedFontSize"), "OUTLINE")
+    speedText:SetAllPoints()
     speedText:SetJustifyH("RIGHT")
     speedText:SetJustifyV("MIDDLE")
-    speedText:SetPoint("RIGHT", mainFrame, "RIGHT", Get("speedTextOffsetX"), Get("speedTextOffsetY"))
     speedText:SetText("")
 
     for i = 1, NUM_CHARGES do
@@ -640,6 +684,7 @@ local function BuildUI()
         end)
     end
     mainFrame:Hide()
+    if speedTextFrame then speedTextFrame:Hide() end
 end
 
 local function ShowPreview()
@@ -647,6 +692,7 @@ local function ShowPreview()
     eventFrame:SetScript("OnUpdate", nil)
     mainFrame:Show()
     mainFrame:SetAlpha(1)
+    if speedTextFrame then speedTextFrame:SetShown(Get("showSpeedText")) end
 
     local db = NaowhQOL.dragonriding or {}
     speedBar:SetValue(0.65)
@@ -682,6 +728,7 @@ function ns:HideDragonridingPreview()
     else
         mainFrame:Hide()
         mainFrame:SetAlpha(0)
+        if speedTextFrame then speedTextFrame:Hide() end
         eventFrame:SetScript("OnUpdate", nil)
         UnregisterDynamicEvents()
     end
@@ -707,6 +754,7 @@ function ns:RefreshDragonridingLayout()
             mainFrame:SetAlpha(0)
             mainFrame:EnableMouse(false)
         end
+        if speedTextFrame then speedTextFrame:Hide() end
         eventFrame:SetScript("OnUpdate", nil)
         UnregisterDynamicEvents()
     end
