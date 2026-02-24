@@ -686,6 +686,7 @@ ns:RegisterLocale("esES", {
     MOUSE_OPACITY_SWIPE = "Opacidad del barrido",
     MOUSE_CAST_SWIPE_ENABLE = "Barrido de progreso de lanzamiento",
     MOUSE_COLOR_CAST_SWIPE = "Color del barrido de lanzamiento",
+    MOUSE_SWIPE_DELAY = "Retraso del barrido (ms)",
     MOUSE_SECTION_TRAIL = "RASTRO DEL RATÓN",
     MOUSE_TRAIL_ENABLE = "Activar rastro del ratón",
     MOUSE_TRAIL_DURATION = "Duración del rastro",

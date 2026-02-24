@@ -686,6 +686,7 @@ ns:RegisterLocale("ptBR", {
     MOUSE_OPACITY_SWIPE = "Transparência da varredura",
     MOUSE_CAST_SWIPE_ENABLE = "Varredura de progresso de conjuração",
     MOUSE_COLOR_CAST_SWIPE = "Cor da varredura de conjuração",
+    MOUSE_SWIPE_DELAY = "Atraso da varredura (ms)",
     MOUSE_SECTION_TRAIL = "Rastro do Mouse",
     MOUSE_TRAIL_ENABLE = "Habilitar rastro do mouse",
     MOUSE_TRAIL_DURATION = "Duração do rastro",

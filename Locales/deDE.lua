@@ -686,6 +686,7 @@ ns:RegisterLocale("deDE", {
     MOUSE_OPACITY_SWIPE = "Wischtransparenz",
     MOUSE_CAST_SWIPE_ENABLE = "Zauberwirkungs-Fortschrittswisch",
     MOUSE_COLOR_CAST_SWIPE = "Zauberwisch-Farbe",
+    MOUSE_SWIPE_DELAY = "Wisch-Verzögerung (ms)",
     MOUSE_SECTION_TRAIL = "MAUSSPUR",
     MOUSE_TRAIL_ENABLE = "Mausspur aktivieren",
     MOUSE_TRAIL_DURATION = "Spurdauer",

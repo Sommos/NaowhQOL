@@ -9,7 +9,7 @@ local RING_TEXEL = 0.5 / 256
 local TRAIL_TEXEL = 0.5 / 128
 local TRAIL_MAX = 20
 local GCD_SPELL = 61304
-local SWIPE_DELAY = 0.08  -- 80ms delay before showing swipes to avoid flicker
+local SWIPE_DELAY_DEFAULT = 0.08  -- 80ms default delay before showing swipes to avoid flicker
 local floor, max = math.floor, math.max
 
 local function GetDB()
@@ -436,7 +436,8 @@ events:SetScript("OnEvent", function(self, event, unit)
             if state.castDelayTimer then
                 state.castDelayTimer:Cancel()
             end
-            state.castDelayTimer = C_Timer.NewTimer(SWIPE_DELAY, function()
+            local swipeDelay = GetDB().swipeDelay or SWIPE_DELAY_DEFAULT
+            state.castDelayTimer = C_Timer.NewTimer(swipeDelay, function()
                 state.castSwipeAllowed = true
                 state.castDelayTimer = nil
                 UpdateRender()
@@ -455,7 +456,8 @@ events:SetScript("OnEvent", function(self, event, unit)
             if state.castDelayTimer then
                 state.castDelayTimer:Cancel()
             end
-            state.castDelayTimer = C_Timer.NewTimer(SWIPE_DELAY, function()
+            local swipeDelay = GetDB().swipeDelay or SWIPE_DELAY_DEFAULT
+            state.castDelayTimer = C_Timer.NewTimer(swipeDelay, function()
                 state.castSwipeAllowed = true
                 state.castDelayTimer = nil
                 UpdateRender()
@@ -514,7 +516,8 @@ events:SetScript("OnEvent", function(self, event, unit)
                 if state.gcdDelayTimer then
                     state.gcdDelayTimer:Cancel()
                 end
-                state.gcdDelayTimer = C_Timer.NewTimer(SWIPE_DELAY, function()
+                local swipeDelay = db.swipeDelay or SWIPE_DELAY_DEFAULT
+                state.gcdDelayTimer = C_Timer.NewTimer(swipeDelay, function()
                     state.gcdSwipeAllowed = true
                     state.gcdDelayTimer = nil
                     UpdateRender()

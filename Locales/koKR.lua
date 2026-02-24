@@ -686,6 +686,7 @@ ns:RegisterLocale("koKR", {
     MOUSE_OPACITY_SWIPE = "스와이프 투명도",
     MOUSE_CAST_SWIPE_ENABLE = "시전 진행 스와이프",
     MOUSE_COLOR_CAST_SWIPE = "시전 스와이프 색상",
+    MOUSE_SWIPE_DELAY = "스와이프 지연 (ms)",
     MOUSE_SECTION_TRAIL = "마우스 흔적",
     MOUSE_TRAIL_ENABLE = "마우스 흔적 활성화",
     MOUSE_TRAIL_DURATION = "흔적 지속 시간",

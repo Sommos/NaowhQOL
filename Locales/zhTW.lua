@@ -686,6 +686,7 @@ ns:RegisterLocale("zhTW", {
     MOUSE_OPACITY_SWIPE = "掃描透明度",
     MOUSE_CAST_SWIPE_ENABLE = "施法進度掃描",
     MOUSE_COLOR_CAST_SWIPE = "施法掃描顏色",
+    MOUSE_SWIPE_DELAY = "掃描延遲 (毫秒)",
     MOUSE_SECTION_TRAIL = "滑鼠軌跡",
     MOUSE_TRAIL_ENABLE = "啟用滑鼠軌跡",
     MOUSE_TRAIL_DURATION = "軌跡持續時間",

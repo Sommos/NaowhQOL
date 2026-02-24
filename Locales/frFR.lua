@@ -686,6 +686,7 @@ ns:RegisterLocale("frFR", {
     MOUSE_OPACITY_SWIPE = "Opacité du balayage",
     MOUSE_CAST_SWIPE_ENABLE = "Balayage de progression d'incantation",
     MOUSE_COLOR_CAST_SWIPE = "Couleur du balayage d'incantation",
+    MOUSE_SWIPE_DELAY = "Délai du balayage (ms)",
     MOUSE_SECTION_TRAIL = "TRAÎNÉE DE SOURIS",
     MOUSE_TRAIL_ENABLE = "Activer la traînée de souris",
     MOUSE_TRAIL_DURATION = "Durée de la traînée",

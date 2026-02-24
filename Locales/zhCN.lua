@@ -695,6 +695,7 @@ ns:RegisterLocale("zhCN", {
     MOUSE_OPACITY_SWIPE = "进度透明度",
     MOUSE_CAST_SWIPE_ENABLE = "施法进度条",
     MOUSE_COLOR_CAST_SWIPE = "施法进度颜色",
+    MOUSE_SWIPE_DELAY = "进度延迟 (毫秒)",
     MOUSE_SECTION_TRAIL = "鼠标拖尾",
     MOUSE_TRAIL_ENABLE = "启用鼠标拖尾",
     MOUSE_TRAIL_DURATION = "拖尾时长",

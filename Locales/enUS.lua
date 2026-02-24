@@ -697,6 +697,7 @@ ns:RegisterLocale("enUS", {
     MOUSE_OPACITY_SWIPE = "Swipe Opacity",
     MOUSE_CAST_SWIPE_ENABLE = "Cast Progress Swipe",
     MOUSE_COLOR_CAST_SWIPE = "Cast Swipe Color",
+    MOUSE_SWIPE_DELAY = "Swipe Delay (ms)",
     MOUSE_SECTION_TRAIL = "MOUSE TRAIL",
     MOUSE_TRAIL_ENABLE = "Enable Mouse Trail",
     MOUSE_TRAIL_DURATION = "Trail Duration",

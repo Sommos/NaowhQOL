@@ -714,7 +714,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
             lastDowntimeStart = 0
             lastDowntimeActive = IsGCDActive() or IsCasting()
             if downtimeTicker then downtimeTicker:Cancel() end
-            downtimeTicker = C_Timer.NewTicker(0.1, TrackDowntime)
+            downtimeTicker = C_Timer.NewTicker(0.033, TrackDowntime)
         end
         RefreshVisibility()
     elseif event == "PLAYER_REGEN_ENABLED" then

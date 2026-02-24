@@ -246,6 +246,17 @@ function ns.InitMouseOptions()
             onChange = function() end
         })
 
+        W:CreateSlider(gcdContent, {
+            label = L["MOUSE_SWIPE_DELAY"],
+            min = 0, max = 200, step = 5,
+            x = GG:Col(2), y = GG:Row(5),
+            value = (db.swipeDelay or 0.08) * 1000,
+            onChange = function(val)
+                db.swipeDelay = val / 1000
+                DebouncedSave()
+            end
+        })
+
         gcdContent:SetHeight(GG:Height(5))
         gcdWrap:RecalcHeight()
 

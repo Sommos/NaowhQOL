@@ -692,6 +692,7 @@ ns:RegisterLocale("ruRU", {
     MOUSE_OPACITY_SWIPE = "Прозрачность заполнения",
     MOUSE_CAST_SWIPE_ENABLE = "Индикатор каста",
     MOUSE_COLOR_CAST_SWIPE = "Цвет каста",
+    MOUSE_SWIPE_DELAY = "Задержка заполнения (мс)",
     MOUSE_SECTION_TRAIL = "СЛЕД КУРСОРА",
     MOUSE_TRAIL_ENABLE = "Включить след курсора",
     MOUSE_TRAIL_DURATION = "Длительность следа",
