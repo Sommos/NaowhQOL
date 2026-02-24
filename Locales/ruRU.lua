@@ -697,6 +697,21 @@ ns:RegisterLocale("ruRU", {
     MOUSE_TRAIL_ENABLE = "Включить след курсора",
     MOUSE_TRAIL_DURATION = "Длительность следа",
     MOUSE_TRAIL_COLOR = "Цвет",
+    MOUSE_SECTION_DETECTION = "ОБНАРУЖЕНИЕ",
+    MOUSE_MELEE_ENABLE = "Включить индикатор ближнего боя",
+    MOUSE_RECOLOR_BORDER = "Перекрасить рамку",
+    MOUSE_RECOLOR_RING = "Перекрасить кольцо",
+    MOUSE_BORDER_ENABLE = "Включить рамку",
+    MOUSE_BORDER_COLOR = "Цвет рамки",
+    MOUSE_BORDER_WEIGHT = "Толщина рамки",
+    MOUSE_SOUND_ENABLE = "Включить звуковое уведомление",
+    MOUSE_SOUND_INTERVAL = "Интервал повтора (сек)",
+    MOUSE_SPELL_ID = "ID заклинания проверки дальности",
+    MOUSE_SPELL_CURRENT = "Текущее: %s",
+    MOUSE_SPELL_UNSUPPORTED = "Не поддерживается для этой специализации",
+    MOUSE_SPELL_NONE = "Заклинание не настроено",
+    MOUSE_RESET_SPELL = "Сбросить по умолчанию",
+    MOUSE_HPAL_NOTE = "Свет-пал использует обнаружение предмета 4yd (~0,5yd погрешность)",
 
     ---------------------------------------------------------------------------
     -- CROSSHAIR

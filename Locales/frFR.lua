@@ -691,6 +691,21 @@ ns:RegisterLocale("frFR", {
     MOUSE_TRAIL_ENABLE = "Activer la traînée de souris",
     MOUSE_TRAIL_DURATION = "Durée de la traînée",
     MOUSE_TRAIL_COLOR = "Couleur",
+    MOUSE_SECTION_DETECTION = "DÉTECTION",
+    MOUSE_MELEE_ENABLE = "Activer l'indicateur de portée de mêlée",
+    MOUSE_RECOLOR_BORDER = "Recolorer la bordure",
+    MOUSE_RECOLOR_RING = "Recolorer l'anneau",
+    MOUSE_BORDER_ENABLE = "Activer la bordure",
+    MOUSE_BORDER_COLOR = "Couleur de la bordure",
+    MOUSE_BORDER_WEIGHT = "Épaisseur de la bordure",
+    MOUSE_SOUND_ENABLE = "Activer l'alerte sonore",
+    MOUSE_SOUND_INTERVAL = "Intervalle de répétition (sec)",
+    MOUSE_SPELL_ID = "ID de sort de vérification de portée",
+    MOUSE_SPELL_CURRENT = "Actuel : %s",
+    MOUSE_SPELL_UNSUPPORTED = "Non pris en charge pour cette spécialisation",
+    MOUSE_SPELL_NONE = "Aucun sort configuré",
+    MOUSE_RESET_SPELL = "Réinitialiser par défaut",
+    MOUSE_HPAL_NOTE = "HPal utilise la détection d'objet à 4m (~0,5m de variance)",
 
     ---------------------------------------------------------------------------
     -- CROSSHAIR

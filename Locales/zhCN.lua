@@ -700,6 +700,21 @@ ns:RegisterLocale("zhCN", {
     MOUSE_TRAIL_ENABLE = "启用鼠标拖尾",
     MOUSE_TRAIL_DURATION = "拖尾时长",
     MOUSE_TRAIL_COLOR = "颜色",
+    MOUSE_SECTION_DETECTION = "检测",
+    MOUSE_MELEE_ENABLE = "启用近战范围指示器",
+    MOUSE_RECOLOR_BORDER = "重新着色边框",
+    MOUSE_RECOLOR_RING = "重新着色环",
+    MOUSE_BORDER_ENABLE = "启用边框",
+    MOUSE_BORDER_COLOR = "边框颜色",
+    MOUSE_BORDER_WEIGHT = "边框粗细",
+    MOUSE_SOUND_ENABLE = "启用声音提醒",
+    MOUSE_SOUND_INTERVAL = "重复间隔（秒）",
+    MOUSE_SPELL_ID = "范围检测法术ID",
+    MOUSE_SPELL_CURRENT = "当前：%s",
+    MOUSE_SPELL_UNSUPPORTED = "此专精不支持",
+    MOUSE_SPELL_NONE = "未配置法术",
+    MOUSE_RESET_SPELL = "重置为默认",
+    MOUSE_HPAL_NOTE = "奶骑使用4码物品检测（约0.5码误差）",
 
     ---------------------------------------------------------------------------
     -- CROSSHAIR (准心)

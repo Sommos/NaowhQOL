@@ -691,6 +691,21 @@ ns:RegisterLocale("koKR", {
     MOUSE_TRAIL_ENABLE = "마우스 흔적 활성화",
     MOUSE_TRAIL_DURATION = "흔적 지속 시간",
     MOUSE_TRAIL_COLOR = "색상",
+    MOUSE_SECTION_DETECTION = "감지",
+    MOUSE_MELEE_ENABLE = "근접 범위 표시기 활성화",
+    MOUSE_RECOLOR_BORDER = "테두리 색 변경",
+    MOUSE_RECOLOR_RING = "링 색 변경",
+    MOUSE_BORDER_ENABLE = "테두리 활성화",
+    MOUSE_BORDER_COLOR = "테두리 색상",
+    MOUSE_BORDER_WEIGHT = "테두리 두께",
+    MOUSE_SOUND_ENABLE = "소리 알림 활성화",
+    MOUSE_SOUND_INTERVAL = "반복 간격 (초)",
+    MOUSE_SPELL_ID = "범위 확인 주문 ID",
+    MOUSE_SPELL_CURRENT = "현재: %s",
+    MOUSE_SPELL_UNSUPPORTED = "이 전문화에서는 지원되지 않습니다",
+    MOUSE_SPELL_NONE = "설정된 주문 없음",
+    MOUSE_RESET_SPELL = "기본값으로 초기화",
+    MOUSE_HPAL_NOTE = "신기사는 4yd 아이템 감지 사용 (~0.5yd 오차)",
 
     ---------------------------------------------------------------------------
     -- CROSSHAIR

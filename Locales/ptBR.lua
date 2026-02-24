@@ -691,6 +691,21 @@ ns:RegisterLocale("ptBR", {
     MOUSE_TRAIL_ENABLE = "Habilitar rastro do mouse",
     MOUSE_TRAIL_DURATION = "Duração do rastro",
     MOUSE_TRAIL_COLOR = "Cor",
+    MOUSE_SECTION_DETECTION = "DETECÇÃO",
+    MOUSE_MELEE_ENABLE = "Habilitar indicador de alcance corpo a corpo",
+    MOUSE_RECOLOR_BORDER = "Recolorir borda",
+    MOUSE_RECOLOR_RING = "Recolorir anel",
+    MOUSE_BORDER_ENABLE = "Habilitar borda",
+    MOUSE_BORDER_COLOR = "Cor da borda",
+    MOUSE_BORDER_WEIGHT = "Espessura da borda",
+    MOUSE_SOUND_ENABLE = "Habilitar alerta sonoro",
+    MOUSE_SOUND_INTERVAL = "Intervalo de repetição (seg)",
+    MOUSE_SPELL_ID = "ID de feitiço de verificação de alcance",
+    MOUSE_SPELL_CURRENT = "Atual: %s",
+    MOUSE_SPELL_UNSUPPORTED = "Não suportado para esta especialização",
+    MOUSE_SPELL_NONE = "Nenhum feitiço configurado",
+    MOUSE_RESET_SPELL = "Restaurar padrão",
+    MOUSE_HPAL_NOTE = "HPal usa detecção de item de 4yd (~0,5yd de variação)",
 
     ---------------------------------------------------------------------------
     -- CROSSHAIR

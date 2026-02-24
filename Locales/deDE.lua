@@ -691,6 +691,21 @@ ns:RegisterLocale("deDE", {
     MOUSE_TRAIL_ENABLE = "Mausspur aktivieren",
     MOUSE_TRAIL_DURATION = "Spurdauer",
     MOUSE_TRAIL_COLOR = "Farbe",
+    MOUSE_SECTION_DETECTION = "ERKENNUNG",
+    MOUSE_MELEE_ENABLE = "Nahkampfreichweite-Anzeige aktivieren",
+    MOUSE_RECOLOR_BORDER = "Rahmen umfärben",
+    MOUSE_RECOLOR_RING = "Ring umfärben",
+    MOUSE_BORDER_ENABLE = "Rahmen aktivieren",
+    MOUSE_BORDER_COLOR = "Rahmenfarbe",
+    MOUSE_BORDER_WEIGHT = "Rahmenstärke",
+    MOUSE_SOUND_ENABLE = "Soundwarnung aktivieren",
+    MOUSE_SOUND_INTERVAL = "Wiederholintervall (Sek.)",
+    MOUSE_SPELL_ID = "Reichweitenprüfung Zauber-ID",
+    MOUSE_SPELL_CURRENT = "Aktuell: %s",
+    MOUSE_SPELL_UNSUPPORTED = "Für diese Spezialisierung nicht unterstützt",
+    MOUSE_SPELL_NONE = "Kein Zauber konfiguriert",
+    MOUSE_RESET_SPELL = "Standard wiederherstellen",
+    MOUSE_HPAL_NOTE = "HPal nutzt 4yd Gegenstandserkennung (~0,5yd Abweichung)",
 
     ---------------------------------------------------------------------------
     -- CROSSHAIR

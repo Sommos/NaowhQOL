@@ -691,6 +691,21 @@ ns:RegisterLocale("zhTW", {
     MOUSE_TRAIL_ENABLE = "啟用滑鼠軌跡",
     MOUSE_TRAIL_DURATION = "軌跡持續時間",
     MOUSE_TRAIL_COLOR = "顏色",
+    MOUSE_SECTION_DETECTION = "偵測",
+    MOUSE_MELEE_ENABLE = "啟用近戰範圍指示器",
+    MOUSE_RECOLOR_BORDER = "重新著色邊框",
+    MOUSE_RECOLOR_RING = "重新著色光環",
+    MOUSE_BORDER_ENABLE = "啟用邊框",
+    MOUSE_BORDER_COLOR = "邊框顏色",
+    MOUSE_BORDER_WEIGHT = "邊框粗細",
+    MOUSE_SOUND_ENABLE = "啟用聲音提醒",
+    MOUSE_SOUND_INTERVAL = "重複間隔（秒）",
+    MOUSE_SPELL_ID = "範圍檢測法術ID",
+    MOUSE_SPELL_CURRENT = "目前：%s",
+    MOUSE_SPELL_UNSUPPORTED = "此專精不支援",
+    MOUSE_SPELL_NONE = "未設定法術",
+    MOUSE_RESET_SPELL = "重設為預設",
+    MOUSE_HPAL_NOTE = "神聖騎使用4碼物品偵測（約0.5碼誤差）",
 
     ---------------------------------------------------------------------------
     -- CROSSHAIR
