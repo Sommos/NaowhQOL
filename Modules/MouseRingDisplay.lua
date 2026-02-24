@@ -40,12 +40,31 @@ local state = {
     -- Cast/channel swipe delay
     castSwipeAllowed = false,  -- false during delay period after cast starts
     castDelayTimer = nil,  -- timer handle for cast swipe delay
+    -- Melee range state
+    isOutOfMelee = false,
+    meleeLastInRange = nil,
 }
+
+--------------------------------------------------------------------------------
+-- MELEE RANGE
+--------------------------------------------------------------------------------
+local HPAL_ITEM_ID = 129055 
+local MELEE_TICK_RATE = 0.05
+local meleeSpellId = nil
+local meleeSupported = false
+local meleeHpalEnabled = false
+
+local function HasAttackableTarget()
+    if not UnitExists("target") then return false end
+    if not UnitCanAttack("player", "target") then return false end
+    if UnitIsDeadOrGhost("target") then return false end
+    return true
+end
 
 --------------------------------------------------------------------------------
 -- FRAMES
 --------------------------------------------------------------------------------
-local container, ring, gcdCooldown, readyRing
+local container, ring, borderRing, gcdCooldown, readyRing
 local trailContainer, trailPoints = nil, {}
 
 --------------------------------------------------------------------------------
@@ -103,12 +122,43 @@ local function UpdateRender()
 
     container:Show()
 
+    -- Layer 0: Border ring (behind background)
+    if borderRing then
+        local meleeOut = db.meleeRecolor and state.isOutOfMelee
+        local showBorder = db.borderEnabled
+        if meleeOut and db.meleeRecolorBorder ~= false then
+            showBorder = true
+        end
+
+        if showBorder then
+            local bw = db.borderWeight or 2
+            local size = db.size or 48
+            if size % 2 == 1 then size = size + 1 end
+            borderRing:SetSize(size + bw * 2, size + bw * 2)
+            borderRing:ClearAllPoints()
+            borderRing:SetPoint("CENTER", container, "CENTER", 0, 0)
+
+            local br, bg, bb = W.GetEffectiveColor(db, "borderR", "borderG", "borderB", "borderUseClassColor")
+            if meleeOut and db.meleeRecolorBorder ~= false then
+                br, bg, bb = 1, 0, 0
+            end
+            borderRing:SetVertexColor(br, bg, bb, 1)
+            borderRing:SetAlpha(alpha)
+            borderRing:Show()
+        else
+            borderRing:Hide()
+        end
+    end
+
     -- Layer 1: Background ring (always visible unless hideBackground)
     if ring then
         if db.hideBackground then
             ring:Hide()
         else
             local r, g, b = GetRingColor()
+            if db.meleeRecolor and state.isOutOfMelee then
+                r, g, b = 1, 0, 0
+            end
             ring:SetVertexColor(r, g, b, 1)
             ring:SetAlpha(alpha)
             ring:Show()
@@ -161,6 +211,9 @@ local function UpdateRender()
             else
                 readyR, readyG, readyB = db.gcdReadyR or 0, db.gcdReadyG or 0.8, db.gcdReadyB or 0.3
             end
+            if db.meleeRecolor and state.isOutOfMelee and db.meleeRecolorRing then
+                readyR, readyG, readyB = 1, 0, 0
+            end
             readyRing:SetVertexColor(readyR, readyG, readyB, 1)
             readyRing:SetAlpha(alpha)
             readyRing:Show()
@@ -180,6 +233,154 @@ local function UpdateRender()
 end
 
 --------------------------------------------------------------------------------
+-- MELEE SOUND
+--------------------------------------------------------------------------------
+local meleeSoundTicker = nil
+local lastMeleeSoundTime = 0
+local MELEE_SOUND_COOLDOWN = 0.9
+
+local function StopMeleeSound()
+    if meleeSoundTicker then
+        meleeSoundTicker:Cancel()
+        meleeSoundTicker = nil
+    end
+end
+
+local function PlayMeleeSoundOnce(soundID)
+    local now = GetTime()
+    if now - lastMeleeSoundTime < MELEE_SOUND_COOLDOWN then return end
+    lastMeleeSoundTime = now
+    ns.SoundList.Play(soundID or ns.Media.DEFAULT_SOUND)
+end
+
+local function StartMeleeSound(db)
+    StopMeleeSound()
+    local interval = db.meleeSoundInterval or 3
+    local soundID = db.meleeSoundID or ns.Media.DEFAULT_SOUND
+    PlayMeleeSoundOnce(soundID)
+    if interval > 0 then
+        meleeSoundTicker = C_Timer.NewTicker(interval, function()
+            PlayMeleeSoundOnce(soundID)
+        end)
+    end
+end
+
+--------------------------------------------------------------------------------
+-- MELEE RANGE TICK
+--------------------------------------------------------------------------------
+local meleeTick = CreateFrame("Frame")
+local meleeTickAcc = 0
+
+local function ShouldMeleeTickRun()
+    local db = GetDB()
+    if not db.enabled then return false end
+    if not db.meleeRecolor then return false end
+    if not meleeSupported then return false end
+    if not HasAttackableTarget() then return false end
+    return true
+end
+
+local function TickMeleeRange()
+    local db = GetDB()
+    if not db.meleeRecolor or not meleeSupported then
+        if state.isOutOfMelee then
+            state.isOutOfMelee = false
+            UpdateRender()
+        end
+        StopMeleeSound()
+        state.meleeLastInRange = nil
+        return
+    end
+
+    local wasOut = state.isOutOfMelee
+
+    if not HasAttackableTarget() then
+        state.isOutOfMelee = false
+        StopMeleeSound()
+        state.meleeLastInRange = nil
+    else
+        local inMelee
+        if meleeHpalEnabled then
+            inMelee = C_Item.IsItemInRange(HPAL_ITEM_ID, "target")
+        elseif meleeSpellId then
+            inMelee = C_Spell.IsSpellInRange(meleeSpellId, "target")
+        end
+        if inMelee == nil then return end
+        state.isOutOfMelee = not inMelee
+
+        if state.isOutOfMelee then
+            if db.meleeSoundEnabled and state.meleeLastInRange == true then
+                StartMeleeSound(db)
+            end
+        else
+            StopMeleeSound()
+        end
+        state.meleeLastInRange = inMelee
+    end
+
+    if state.isOutOfMelee ~= wasOut then
+        UpdateRender()
+    end
+end
+
+local meleeTickOnUpdate = ns.PerfMonitor:Wrap("MouseRing Range", function(self, elapsed)
+    meleeTickAcc = meleeTickAcc + elapsed
+    if meleeTickAcc < MELEE_TICK_RATE then return end
+    meleeTickAcc = 0
+    TickMeleeRange()
+end)
+
+local function StartMeleeTick()
+    if not meleeTick:GetScript("OnUpdate") then
+        meleeTick:SetScript("OnUpdate", meleeTickOnUpdate)
+    end
+end
+
+local function StopMeleeTick()
+    meleeTick:SetScript("OnUpdate", nil)
+    meleeTickAcc = 0
+    if state.isOutOfMelee then
+        state.isOutOfMelee = false
+        UpdateRender()
+    end
+    StopMeleeSound()
+    state.meleeLastInRange = nil
+end
+
+local function EvaluateMeleeTick()
+    if ShouldMeleeTickRun() then
+        StartMeleeTick()
+    else
+        StopMeleeTick()
+    end
+end
+
+local function CacheMeleeSpell()
+    if meleeHpalEnabled then return end
+    local info = ns.MeleeRangeInfo
+    if not info then return end
+    meleeSpellId = info.GetCurrentSpell()
+    meleeSupported = (meleeSpellId ~= nil)
+end
+
+local function EvaluateHpalMode()
+    local db = GetDB()
+    local classFile = ns.SpecUtil.GetClassName()
+    local specIndex = ns.SpecUtil.GetSpecIndex()
+
+    local shouldEnable = classFile == "PALADIN"
+        and specIndex == 1
+        and db.enabled and db.meleeRecolor
+
+    if shouldEnable then
+        meleeHpalEnabled = true
+        meleeSupported = true
+    else
+        meleeHpalEnabled = false
+    end
+end
+
+--------------------------------------------------------------------------------
 -- FRAME CREATION
 --------------------------------------------------------------------------------
 local function CreateRing()
@@ -194,8 +395,13 @@ local function CreateRing()
     container:SetFrameStrata("TOOLTIP")
     container:EnableMouse(false)
 
-    -- Main ring texture (background)
+    -- Border ring (slightly larger, behind background)
     local shape = db.shape or "ring.tga"
+    borderRing = container:CreateTexture(nil, "BACKGROUND")
+    SetupTexture(borderRing, shape)
+    borderRing:Hide()
+
+    -- Main ring texture (background)
     ring = container:CreateTexture(nil, "BORDER")
     ring:SetAllPoints()
     SetupTexture(ring, shape)
@@ -400,6 +606,8 @@ events:RegisterUnitEvent("UNIT_SPELLCAST_FAILED", "player")
 events:RegisterUnitEvent("UNIT_SPELLCAST_INTERRUPTED", "player")
 events:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_START", "player")
 events:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_STOP", "player")
+events:RegisterEvent("PLAYER_TARGET_CHANGED")
+events:RegisterEvent("PLAYER_LEAVING_WORLD")
 
 events:SetScript("OnEvent", function(self, event, unit)
     if event == "PLAYER_LOGIN" or event == "PLAYER_ENTERING_WORLD" then
@@ -412,18 +620,34 @@ events:SetScript("OnEvent", function(self, event, unit)
         state.channelEnd = 0
         CreateRing()
         CreateTrail()
+        EvaluateHpalMode()
+        CacheMeleeSpell()
         UpdateRender()
+        EvaluateMeleeTick()
 
         -- Register for profile refresh (safe to call multiple times due to key)
         ns.SettingsIO:RegisterRefresh("mouseRing", function()
             CreateRing()
             CreateTrail()
+            EvaluateHpalMode()
+            CacheMeleeSpell()
             UpdateRender()
+            EvaluateMeleeTick()
         end)
 
     elseif event == "PLAYER_REGEN_DISABLED" or event == "PLAYER_REGEN_ENABLED" then
         RefreshCombatState()
         UpdateRender()
+
+    elseif event == "PLAYER_TARGET_CHANGED" then
+        state.isOutOfMelee = false
+        state.meleeLastInRange = nil
+        StopMeleeSound()
+        UpdateRender()
+        EvaluateMeleeTick()
+
+    elseif event == "PLAYER_LEAVING_WORLD" then
+        StopMeleeTick()
 
     elseif event == "UNIT_SPELLCAST_START" then
         local _, _, _, startTime, endTime = UnitCastingInfo("player")
@@ -537,6 +761,12 @@ events:SetScript("OnEvent", function(self, event, unit)
     end
 end)
 
+ns.SpecUtil.RegisterCallback("MouseRingDisplay", function()
+    EvaluateHpalMode()
+    CacheMeleeSpell()
+    EvaluateMeleeTick()
+end)
+
 --------------------------------------------------------------------------------
 -- PUBLIC API
 --------------------------------------------------------------------------------
@@ -552,6 +782,7 @@ function MouseRingDisplay:UpdateDisplay()
     if size % 2 == 1 then size = size + 1 end
 
     if container then container:SetSize(size, size) end
+    if borderRing then SetupTexture(borderRing, shape) end
     if ring then
         SetupTexture(ring, shape)
         local r, g, b = GetRingColor()
@@ -560,13 +791,17 @@ function MouseRingDisplay:UpdateDisplay()
     if readyRing then SetupTexture(readyRing, shape) end
     if gcdCooldown then gcdCooldown:SetSwipeTexture(ASSET_PATH .. shape) end
 
+    EvaluateHpalMode()
+    CacheMeleeSpell()
     UpdateRender()
+    EvaluateMeleeTick()
 end
 
 function MouseRingDisplay:UpdateSize(size)
     GetDB().size = size
     if size % 2 == 1 then size = size + 1 end
     if container then container:SetSize(size, size) end
+    UpdateRender()
 end
 
 function MouseRingDisplay:UpdateColor(r, g, b)
@@ -577,6 +812,7 @@ end
 
 function MouseRingDisplay:UpdateShape(shape)
     GetDB().shape = shape
+    if borderRing then SetupTexture(borderRing, shape) end
     if ring then SetupTexture(ring, shape) end
     if readyRing then SetupTexture(readyRing, shape) end
     if gcdCooldown then gcdCooldown:SetSwipeTexture(ASSET_PATH .. shape) end
@@ -591,4 +827,5 @@ function MouseRingDisplay:RefreshVisibility()
     UpdateRender()
 end
 
+MouseRingDisplay.StopMeleeSound = StopMeleeSound
 ns.MouseRingDisplay = MouseRingDisplay

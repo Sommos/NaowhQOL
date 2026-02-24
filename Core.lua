@@ -233,6 +233,9 @@ local MOUSE_RING_DEFAULTS = {
     hideBackground = false,
     castSwipeEnabled = true,
     castSwipeR = 0.004, castSwipeG = 0.56, castSwipeB = 0.91,
+    meleeRecolor = false,
+    meleeRecolorBorder = true, meleeRecolorRing = false,
+    meleeSoundEnabled = false, meleeSoundID = "Raid Warning", meleeSoundInterval = 3,
 }
 
 local CREZ_DEFAULTS = {

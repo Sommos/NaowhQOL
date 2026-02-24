@@ -32,7 +32,7 @@ function ns.InitMouseOptions()
 
     W:CachedPanel(cache, "cursorPanel", p, function(f)
         local db = GetDB()
-        local sf, sc = W:CreateScrollFrame(f, 900)
+        local sf, sc = W:CreateScrollFrame(f, 1300)
 
         W:CreatePageHeader(sc,
             {{"MOUSE", C.BLUE}, {"RING", C.ORANGE}},
@@ -80,7 +80,7 @@ function ns.InitMouseOptions()
         local sectionContainer = CreateFrame("Frame", nil, sc)
         sectionContainer:SetPoint("TOPLEFT", killArea, "BOTTOMLEFT", 0, -10)
         sectionContainer:SetPoint("RIGHT", sc, "RIGHT", -10, 0)
-        sectionContainer:SetHeight(600)
+        sectionContainer:SetHeight(900)
 
         local RelayoutSections
 
@@ -148,7 +148,34 @@ function ns.InitMouseOptions()
             end
         })
 
-        appContent:SetHeight(G:Height(3))
+        W:CreateCheckbox(appContent, {
+            label = L["MOUSE_BORDER_ENABLE"],
+            db = db, key = "borderEnabled",
+            x = G:Col(1), y = G:Row(4) + 10,
+            template = "ChatConfigCheckButtonTemplate",
+            onChange = refresh,
+        })
+
+        W:CreateColorPicker(appContent, {
+            label = L["MOUSE_BORDER_COLOR"], db = db,
+            rKey = "borderR", gKey = "borderG", bKey = "borderB",
+            classColorKey = "borderUseClassColor",
+            x = G:Col(2), y = G:Row(4) - 5,
+            onChange = refresh,
+        })
+
+        W:CreateSlider(appContent, {
+            label = L["MOUSE_BORDER_WEIGHT"],
+            min = 1, max = 8, step = 1,
+            x = G:Col(1), y = G:Row(5),
+            value = db.borderWeight or 2,
+            onChange = function(val)
+                db.borderWeight = val
+                refresh()
+            end
+        })
+
+        appContent:SetHeight(G:Height(5))
         appWrap:RecalcHeight()
 
         -- GCD section
@@ -301,7 +328,198 @@ function ns.InitMouseOptions()
         trailContent:SetHeight(GT:Height(2))
         trailWrap:RecalcHeight()
 
-        local allSections = { appWrap, gcdWrap, trailWrap }
+        -- DETECTION section (melee range)
+        local mlWrap, mlContent = W:CreateCollapsibleSection(sectionContainer, {
+            text = L["MOUSE_SECTION_DETECTION"],
+            startOpen = false,
+            onCollapse = function() if RelayoutSections then RelayoutSections() end end,
+        })
+
+        local meleeSubElements = {}
+
+        local function updateMeleeSubVisibility()
+            local show = db.meleeRecolor
+            for _, el in ipairs(meleeSubElements) do
+                el:SetShown(show)
+            end
+            mlContent:SetHeight(show and 330 or 35)
+            mlWrap:RecalcHeight()
+            if RelayoutSections then RelayoutSections() end
+        end
+
+        W:CreateCheckbox(mlContent, {
+            label = L["MOUSE_MELEE_ENABLE"],
+            db = db, key = "meleeRecolor",
+            x = 10, y = -5,
+            template = "ChatConfigCheckButtonTemplate",
+            onChange = function()
+                refresh()
+                updateMeleeSubVisibility()
+            end
+        })
+
+        -- Recolor options
+        meleeSubElements[#meleeSubElements + 1] = W:CreateCheckbox(mlContent, {
+            label = L["MOUSE_RECOLOR_BORDER"],
+            db = db, key = "meleeRecolorBorder",
+            x = 10, y = -35,
+            template = "ChatConfigCheckButtonTemplate",
+            onChange = refresh
+        })
+
+        meleeSubElements[#meleeSubElements + 1] = W:CreateCheckbox(mlContent, {
+            label = L["MOUSE_RECOLOR_RING"],
+            db = db, key = "meleeRecolorRing",
+            x = 150, y = -35,
+            template = "ChatConfigCheckButtonTemplate",
+            onChange = refresh
+        })
+
+        -- Sound options
+        local soundCB = W:CreateCheckbox(mlContent, {
+            label = L["MOUSE_SOUND_ENABLE"],
+            db = db, key = "meleeSoundEnabled",
+            x = 10, y = -65,
+            template = "ChatConfigCheckButtonTemplate",
+            onChange = function(enabled)
+                if not enabled and display and display.StopMeleeSound then
+                    display.StopMeleeSound()
+                end
+                refresh()
+            end
+        })
+        meleeSubElements[#meleeSubElements + 1] = soundCB
+
+        local soundPicker = W:CreateSoundPicker(mlContent, 10, -95, db.meleeSoundID or ns.Media.DEFAULT_SOUND,
+            function(sound) db.meleeSoundID = sound end)
+        meleeSubElements[#meleeSubElements + 1] = soundPicker
+
+        local intervalSliderWrapper = W:CreateSlider(mlContent, {
+            label = L["MOUSE_SOUND_INTERVAL"],
+            min = 0, max = 15, step = 1,
+            x = 10, y = -135,
+            value = db.meleeSoundInterval or 3,
+            onChange = function(val)
+                db.meleeSoundInterval = val
+                DebouncedSave()
+            end
+        })
+        meleeSubElements[#meleeSubElements + 1] = intervalSliderWrapper
+
+        -- Spell ID customization
+        local spellLabel = mlContent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        spellLabel:SetPoint("TOPLEFT", 10, -200)
+        spellLabel:SetText(W.Colorize(L["MOUSE_SPELL_ID"], C.WHITE))
+        meleeSubElements[#meleeSubElements + 1] = spellLabel
+
+        local spellStatusText = mlContent:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        spellStatusText:SetPoint("TOPLEFT", 10, -217)
+        spellStatusText:SetTextColor(0.6, 0.6, 0.6)
+        meleeSubElements[#meleeSubElements + 1] = spellStatusText
+
+        local spellInputContainer = CreateFrame("Frame", nil, mlContent)
+        spellInputContainer:SetSize(250, 25)
+        spellInputContainer:SetPoint("TOPLEFT", 10, -235)
+        meleeSubElements[#meleeSubElements + 1] = spellInputContainer
+
+        local spellInput = CreateFrame("EditBox", nil, spellInputContainer, "InputBoxTemplate")
+        spellInput:SetSize(100, 20)
+        spellInput:SetPoint("LEFT", 0, 0)
+        spellInput:SetAutoFocus(false)
+        spellInput:SetNumeric(true)
+        spellInput:SetMaxLetters(9)
+
+        NaowhQOL.crosshair = NaowhQOL.crosshair or {}
+        local crosshairDb = NaowhQOL.crosshair
+
+        local function UpdateSpellDisplay()
+            local info = ns.MeleeRangeInfo
+            if not info then return end
+
+            local current = info.GetCurrentSpell()
+            local default = info.GetDefaultSpell()
+
+            if current then
+                spellInput:SetText(tostring(current))
+                local spellInfo = C_Spell.GetSpellInfo(current)
+                local spellName = spellInfo and spellInfo.name or "Unknown"
+                spellStatusText:SetText(string.format(L["MOUSE_SPELL_CURRENT"], spellName))
+                spellStatusText:SetTextColor(0.5, 1, 0.5)
+            elseif default == nil then
+                spellInput:SetText("")
+                spellStatusText:SetText(L["MOUSE_SPELL_UNSUPPORTED"])
+                spellStatusText:SetTextColor(1, 0.5, 0.5)
+            else
+                spellInput:SetText("")
+                spellStatusText:SetText(L["MOUSE_SPELL_NONE"])
+                spellStatusText:SetTextColor(1, 0.5, 0.5)
+            end
+        end
+
+        spellInput:SetScript("OnEnterPressed", function(self)
+            local info = ns.MeleeRangeInfo
+            if not info then return end
+
+            local key = info.GetSpellKey()
+            if not key then return end
+
+            local val = tonumber(self:GetText())
+            if val and val > 0 then
+                crosshairDb.meleeSpellOverrides = crosshairDb.meleeSpellOverrides or {}
+                crosshairDb.meleeSpellOverrides[key] = val
+                info.RefreshCache()
+                refresh()
+            end
+            UpdateSpellDisplay()
+            self:ClearFocus()
+        end)
+
+        spellInput:SetScript("OnEscapePressed", function(self)
+            UpdateSpellDisplay()
+            self:ClearFocus()
+        end)
+
+        local resetSpellBtn = W:CreateButton(spellInputContainer, {
+            text = L["MOUSE_RESET_SPELL"],
+            width = 120,
+            height = 22,
+            onClick = function()
+                local info = ns.MeleeRangeInfo
+                if not info then return end
+
+                local key = info.GetSpellKey()
+                if key and crosshairDb.meleeSpellOverrides then
+                    crosshairDb.meleeSpellOverrides[key] = nil
+                end
+                info.RefreshCache()
+                UpdateSpellDisplay()
+                refresh()
+            end
+        })
+        resetSpellBtn:SetPoint("LEFT", spellInput, "RIGHT", 10, 0)
+
+        -- Holy Paladin note
+        local hpalNote = mlContent:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        hpalNote:SetPoint("TOPLEFT", 250, -238)
+        hpalNote:SetText(L["MOUSE_HPAL_NOTE"])
+        hpalNote:SetTextColor(1, 0.82, 0)
+        local isHpal = ns.SpecUtil.GetClassName() == "PALADIN" and ns.SpecUtil.GetSpecIndex() == 1
+        hpalNote:SetAlpha(isHpal and 1 or 0)
+        hpalNote:SetShown(db.meleeRecolor)
+        meleeSubElements[#meleeSubElements + 1] = hpalNote
+
+        UpdateSpellDisplay()
+
+        ns.SpecUtil.RegisterCallback("MouseRingConfig", function()
+            UpdateSpellDisplay()
+        end)
+
+        updateMeleeSubVisibility()
+
+        mlContent:SetHeight(db.meleeRecolor and 330 or 35)
+        mlWrap:RecalcHeight()
+
+        local allSections = { appWrap, gcdWrap, trailWrap, mlWrap }
 
         RelayoutSections = function()
             for i, section in ipairs(allSections) do
