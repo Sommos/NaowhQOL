@@ -84,6 +84,7 @@ local DRAGONRIDING_DEFAULTS = {
     thrillColorR = 1.00, thrillColorG = 0.66, thrillColorB = 0.00,
     chargeColorR = 0.01, chargeColorG = 0.56, chargeColorB = 0.91,
     speedFont = NAOWH_FONT, speedFontSize = 12,
+    speedTextOffsetX = 0, speedTextOffsetY = 0,
     surgeIconSize = 0, surgeAnchor = "RIGHT", surgeOffsetX = 6, surgeOffsetY = 0,
     anchorFrame = "UIParent", anchorTo = "BOTTOM", matchAnchorWidth = false,
     bgColorR = 0.12, bgColorG = 0.12, bgColorB = 0.12, bgAlpha = 0.8,
