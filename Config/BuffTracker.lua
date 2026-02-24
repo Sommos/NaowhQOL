@@ -14,7 +14,7 @@ end
 
 local BUFF_TRACKER_DEFAULTS = {
     enabled = true, iconSize = 40, spacing = 4, textSize = 14,
-    font = "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", showMissingOnly = false,
+    font = "Naowh", showMissingOnly = false,
     combatOnly = false, showCooldown = true, showStacks = true,
     unlocked = false, showAllRaidBuffs = false, showRaidBuffs = true,
     showPersonalAuras = true, showStances = true,

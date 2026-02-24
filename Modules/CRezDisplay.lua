@@ -3,7 +3,7 @@ local L = ns.L
 local W = ns.Widgets
 local MakeSlot = ns.DisplayUtils.MakeSlot
 
-local NAOWH_FONT = "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+local NAOWH_FONT = ns.DefaultFontPath()
 local REBIRTH_SPELL_ID = 20484
 
 -- State tracking (event-driven, not polled)

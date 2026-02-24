@@ -69,8 +69,8 @@ function ns:InitEmoteDetection()
         local GA = ns.Layout:New(2)
 
         -- Row 1: Font picker
-        W:CreateFontPicker(appContent, GA:Col(1), GA:Row(1) + 12, db.font, function(path)
-            db.font = path
+        W:CreateFontPicker(appContent, GA:Col(1), GA:Row(1) + 12, db.font, function(name)
+            db.font = name
             refreshDisplay()
         end)
 
@@ -148,7 +148,7 @@ function ns:InitEmoteDetection()
             onChange = refreshDisplay,
         })
 
-        W:CreateSoundPicker(soundContent, 10, -35, db.soundID or 8959,
+        W:CreateSoundPicker(soundContent, 10, -35, db.soundID or ns.Media.DEFAULT_SOUND,
             function(sound) db.soundID = sound end)
 
         soundContent:SetHeight(80)

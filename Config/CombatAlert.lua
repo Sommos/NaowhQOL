@@ -65,8 +65,8 @@ function ns:InitCombatAlerts()
             onCollapse = function() if RelayoutSections then RelayoutSections() end end,
         })
 
-        W:CreateFontPicker(appContent, 10, -5, db.font, function(path)
-            db.font = path
+        W:CreateFontPicker(appContent, 10, -5, db.font, function(name)
+            db.font = name
             refresh()
         end)
 

@@ -38,7 +38,7 @@ stealthFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 150)
 stealthFrame:Hide()
 
 local stealthLabel = stealthFrame:CreateFontString(nil, "OVERLAY")
-stealthLabel:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 24, "OUTLINE")
+stealthLabel:SetFont(ns.DefaultFontPath(), 24, "OUTLINE")
 stealthLabel:SetPoint("CENTER")
 
 local stealthResizeHandle
@@ -69,11 +69,11 @@ function stealthFrame:UpdateDisplay()
         stealthFrame.initialized = true
     end
 
-    local fontPath = db.font or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+    local fontPath = ns.Media.ResolveFont(db.font)
     local fontSize = math.max(10, math.min(72, math.floor(stealthFrame:GetHeight() * 0.55)))
     local success = stealthLabel:SetFont(fontPath, fontSize, "OUTLINE")
     if not success then
-        stealthLabel:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", fontSize, "OUTLINE")
+        stealthLabel:SetFont(ns.DefaultFontPath(), fontSize, "OUTLINE")
     end
 
     if not db.enabled then
@@ -162,7 +162,7 @@ stanceFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 100)
 stanceFrame:Hide()
 
 local stanceLabel = stanceFrame:CreateFontString(nil, "OVERLAY")
-stanceLabel:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 24, "OUTLINE")
+stanceLabel:SetFont(ns.DefaultFontPath(), 24, "OUTLINE")
 stanceLabel:SetPoint("CENTER")
 
 local stanceResizeHandle
@@ -189,7 +189,7 @@ end
 local function StartStanceSound(db)
     StopStanceSound()
     local interval = db.stanceSoundInterval or 3
-    local sound = db.stanceSound or { id = 8959 }
+    local sound = db.stanceSound or ns.Media.DEFAULT_SOUND
     PlayStanceSound(sound)
     stanceSoundFired = true
     if interval > 0 then
@@ -241,11 +241,11 @@ function stanceFrame:UpdateDisplay()
         stanceFrame.initialized = true
     end
 
-    local fontPath = db.font or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+    local fontPath = ns.Media.ResolveFont(db.font)
     local fontSize = math.max(10, math.min(72, math.floor(stanceFrame:GetHeight() * 0.55)))
     local success = stanceLabel:SetFont(fontPath, fontSize, "OUTLINE")
     if not success then
-        stanceLabel:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", fontSize, "OUTLINE")
+        stanceLabel:SetFont(ns.DefaultFontPath(), fontSize, "OUTLINE")
     end
 
     if not db.stanceEnabled then

@@ -35,6 +35,7 @@ Locales/koKR.lua
 Locales/zhCN.lua
 Locales/zhTW.lua
 Locales/ptBR.lua
+Data/Media.lua
 Data/Widgets.lua
 Data/SoundList.lua
 Data/FontList.lua

@@ -77,8 +77,8 @@ function ns:InitStealthReminder()
             onCollapse = function() if RelayoutAll then RelayoutAll() end end,
         })
 
-        W:CreateFontPicker(appContent, 10, -5, db.font, function(path)
-            db.font = path
+        W:CreateFontPicker(appContent, 10, -5, db.font, function(name)
+            db.font = name
             refreshAll()
         end)
 
@@ -304,7 +304,7 @@ function ns:InitStealthReminder()
             onChange = refreshStance
         })
 
-        W:CreateSoundPicker(stColContent, 10, -110, db.stanceSound or { id = 8959 },
+        W:CreateSoundPicker(stColContent, 10, -110, db.stanceSound or ns.Media.DEFAULT_SOUND,
             function(sound) db.stanceSound = sound end)
 
         local intervalSlider = W:CreateSlider(stColContent, {

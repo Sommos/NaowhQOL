@@ -202,7 +202,7 @@ iconTexture:SetTexture(132161)  -- Beast Call / summon pet icon
 
 -- Warning label
 local warningLabel = petFrame:CreateFontString(nil, "OVERLAY")
-warningLabel:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 20, "OUTLINE")
+warningLabel:SetFont(ns.DefaultFontPath(), 20, "OUTLINE")
 warningLabel:SetPoint("CENTER")
 
 local resizeHandle
@@ -238,7 +238,7 @@ function petFrame:UpdateDisplay()
 
     -- Font sizing
     local fontSize = math.max(12, math.min(48, db.textSize or 20))
-    local fontPath = db.font or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+    local fontPath = ns.Media.ResolveFont(db.font)
     warningLabel:SetFont(fontPath, fontSize, "OUTLINE")
 
     -- Icon visibility and positioning

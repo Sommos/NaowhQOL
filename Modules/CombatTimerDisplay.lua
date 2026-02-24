@@ -12,7 +12,7 @@ timerText:SetPoint("CENTER", timerFrame, "CENTER", 0, 0)
 timerText:SetJustifyH("CENTER")
 timerText:SetJustifyV("MIDDLE")
 timerText:SetWordWrap(false)
-timerText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 32, "OUTLINE")
+timerText:SetFont(ns.DefaultFontPath(), 32, "OUTLINE")
 timerText:SetText("COMBAT: 0:00")
 
 local resizeHandle
@@ -44,7 +44,7 @@ function timerFrame:UpdateTextSize()
     local db = NaowhQOL.combatTimer
     if not db then return end
 
-    local fontPath = db.font or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+    local fontPath = ns.Media.ResolveFont(db.font)
 
     -- Scale font to fit frame size
     local frameWidth = timerFrame:GetWidth()
@@ -64,7 +64,7 @@ function timerFrame:UpdateTextSize()
 
     local success = timerText:SetFont(fontPath, scaledFontSize, "OUTLINE")
     if not success then
-        timerText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", scaledFontSize, "OUTLINE")
+        timerText:SetFont(ns.DefaultFontPath(), scaledFontSize, "OUTLINE")
     end
 end
 

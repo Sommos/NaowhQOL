@@ -54,7 +54,7 @@ rangeFrame:SetPoint("CENTER", UIParent, "CENTER", 0, -190)
 rangeFrame:Hide()
 
 local rangeLabel = rangeFrame:CreateFontString(nil, "OVERLAY")
-rangeLabel:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 24, "OUTLINE")
+rangeLabel:SetFont(ns.DefaultFontPath(), 24, "OUTLINE")
 rangeLabel:SetPoint("CENTER")
 
 local rangeResizeHandle
@@ -93,11 +93,11 @@ function rangeFrame:UpdateDisplay()
         rangeFrame.initialized = true
     end
 
-    local fontPath = db.rangeFont or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+    local fontPath = ns.Media.ResolveFont(db.rangeFont)
     local fontSize = math.max(10, math.min(72, math.floor(rangeFrame:GetHeight() * 0.55)))
     local ok = rangeLabel:SetFont(fontPath, fontSize, "OUTLINE")
     if not ok then
-        rangeLabel:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", fontSize, "OUTLINE")
+        rangeLabel:SetFont(ns.DefaultFontPath(), fontSize, "OUTLINE")
     end
 end
 

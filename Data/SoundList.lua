@@ -74,6 +74,17 @@ local builtIn = {
 
 ns.SoundList = {}
 
+-- Register all built-in sounds with LSM so they're fetchable by name
+local function RegisterBuiltInWithLSM()
+    local LSM = LibStub and LibStub("LibSharedMedia-3.0", true)
+    if not LSM then return end
+    for _, s in ipairs(builtIn) do
+        LSM:Register(LSM.MediaType.SOUND, s.name, s.id)
+    end
+end
+
+RegisterBuiltInWithLSM()
+
 local dirty = true
 local sourceColors = {}     -- source name -> color table
 local sourceList = {}       -- ordered list: {"All", "Base Game", ...}
@@ -184,6 +195,7 @@ function ns.SoundList.Rebuild()
     ns.SoundList._nameByPath = {}
     ns.SoundList._entryByID = {}
     ns.SoundList._entryByPath = {}
+    ns.SoundList._entryByName = {}
     for _, s in ipairs(ns.SoundList) do
         if s.id then
             ns.SoundList._nameByID[s.id] = s.name
@@ -193,6 +205,7 @@ function ns.SoundList.Rebuild()
             ns.SoundList._nameByPath[s.path] = s.name
             ns.SoundList._entryByPath[s.path] = s
         end
+        ns.SoundList._entryByName[s.name] = s
     end
 
     -- Build ordered source list for filter dropdown
@@ -229,11 +242,15 @@ function ns.SoundList.GetName(idOrPath)
     end
 end
 
--- Get entry by sound data table {id=...} or {path=...}
+-- Get entry by sound data: string name, {id=...}, {path=...}, or number
 function ns.SoundList.GetEntry(soundData)
     if not soundData then return nil end
     ns.SoundList.Rebuild()
-    if soundData.id then
+    if type(soundData) == "string" then
+        return ns.SoundList._entryByName[soundData]
+    elseif type(soundData) == "number" then
+        return ns.SoundList._entryByID[soundData]
+    elseif soundData.id then
         return ns.SoundList._entryByID[soundData.id]
     elseif soundData.path then
         return ns.SoundList._entryByPath[soundData.path]
@@ -250,11 +267,40 @@ end
 -- Default fallback sound (Raid Warning)
 local FALLBACK_SOUND_ID = 8959
 
--- Unified playback - handles both ID and path based sounds
+-- Unified playback - handles LSM names, legacy {id=N}/{path="..."} tables, and numbers
 -- Returns true if sound played successfully, false if fallback was used
 function ns.SoundList.Play(soundData)
     if not soundData then return false end
 
+    -- String → LSM name (new format)
+    if type(soundData) == "string" then
+        if ns.Media and ns.Media.ResolveSound then
+            local resolved = ns.Media.ResolveSound(soundData)
+            if resolved then
+                if type(resolved) == "number" then
+                    PlaySound(resolved, "Master")
+                    return true
+                else
+                    local willPlay = PlaySoundFile(resolved, "Master")
+                    if not willPlay then
+                        PlaySound(FALLBACK_SOUND_ID, "Master")
+                        return false
+                    end
+                    return true
+                end
+            end
+        end
+        PlaySound(FALLBACK_SOUND_ID, "Master")
+        return false
+    end
+
+    -- Number → legacy numeric ID
+    if type(soundData) == "number" then
+        PlaySound(soundData, "Master")
+        return true
+    end
+
+    -- Table → legacy {id=N} or {path="..."}
     if soundData.id then
         PlaySound(soundData.id, "Master")
         return true
@@ -269,6 +315,30 @@ function ns.SoundList.Play(soundData)
         return true
     end
     return false
+end
+
+--- Convert a legacy sound value (number, {id=N}, {path="..."}) to an LSM name.
+--- Returns the name string or nil if no match found.
+function ns.SoundList.GetNameFromLegacy(soundData)
+    if not soundData then return nil end
+    ns.SoundList.Rebuild()
+
+    if type(soundData) == "number" then
+        return ns.SoundList._nameByID[soundData]
+    elseif type(soundData) == "table" then
+        if soundData.id and type(soundData.id) == "number" then
+            return ns.SoundList._nameByID[soundData.id]
+        elseif soundData.path then
+            return ns.SoundList._nameByPath[soundData.path]
+        end
+    elseif type(soundData) == "string" then
+        -- Could already be a name, or a legacy file path
+        if not soundData:find("\\") and not soundData:find("/") then
+            return soundData  -- Already a name
+        end
+        return ns.SoundList._nameByPath[soundData]
+    end
+    return nil
 end
 
 -- Hook LSM callback to mark dirty when new sounds are registered

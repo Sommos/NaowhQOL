@@ -37,11 +37,11 @@ local DEFAULTS = {
     showSpeedText = true, swapPosition = false, hideWhenGroundedFull = false,
     showSecondWind = true, showWhirlingSurge = true, colorPreset = "Classic",
     unlocked = false, point = "BOTTOM", posX = 0, posY = 200,
-    barStyle = [[Interface\Buttons\WHITE8X8]],
+    barStyle = "Solid",
     speedColorR = 0.00, speedColorG = 0.49, speedColorB = 0.79,
     thrillColorR = 1.00, thrillColorG = 0.66, thrillColorB = 0.00,
     chargeColorR = 0.01, chargeColorG = 0.56, chargeColorB = 0.91,
-    speedFont = "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf",
+    speedFont = "Naowh",
     speedFontSize = 12, surgeIconSize = 0, surgeAnchor = "RIGHT",
     surgeOffsetX = 6, surgeOffsetY = 0, anchorFrame = "UIParent", anchorTo = "BOTTOM",
     matchAnchorWidth = false,
@@ -255,7 +255,7 @@ local function UpdateLayout()
     speedBar:SetPoint("TOPLEFT", mainFrame, "TOPLEFT", borderSize, speedY)
 
     speedText:SetShown(Get("showSpeedText"))
-    speedText:SetFont(Get("speedFont"), Get("speedFontSize"), "OUTLINE")
+    speedText:SetFont(ns.Media.ResolveFont(Get("speedFont")), Get("speedFontSize"), "OUTLINE")
 
     for i = 1, NUM_CHARGES do
         local xOff = borderSize + (i - 1) * (barWidth + gap)
@@ -310,7 +310,7 @@ local function UpdateLayout()
     end
 
     -- Apply bar style to all status bars
-    local barTex = Get("barStyle") or BAR_TEXTURE
+    local barTex = ns.Media.ResolveBar(Get("barStyle")) or BAR_TEXTURE
     speedBar:SetStatusBarTexture(barTex)
     for i = 1, NUM_CHARGES do
         secondWindBars[i]:SetStatusBarTexture(barTex)
@@ -550,7 +550,7 @@ local function BuildUI()
     speedTextFrame:SetFrameLevel(mainFrame:GetFrameLevel() + 10)
 
     speedText = speedTextFrame:CreateFontString(nil, "OVERLAY")
-    speedText:SetFont(Get("speedFont"), Get("speedFontSize"), "OUTLINE")
+    speedText:SetFont(ns.Media.ResolveFont(Get("speedFont")), Get("speedFontSize"), "OUTLINE")
     speedText:SetJustifyH("RIGHT")
     speedText:SetJustifyV("MIDDLE")
     speedText:SetPoint("RIGHT", mainFrame, "RIGHT", -2, 0)

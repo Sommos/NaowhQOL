@@ -33,7 +33,7 @@ warnFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 250)
 warnFrame:Hide()
 
 local warnText = warnFrame:CreateFontString(nil, "OVERLAY")
-warnText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 22, "OUTLINE")
+warnText:SetFont(ns.DefaultFontPath(), 22, "OUTLINE")
 warnText:SetPoint("CENTER")
 warnText:SetTextColor(PINK_R, PINK_G, PINK_B)
 

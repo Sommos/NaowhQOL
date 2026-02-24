@@ -385,7 +385,7 @@ function ns:InitCrosshair()
         })
         meleeSubElements[#meleeSubElements + 1] = soundCB
 
-        local soundPicker = W:CreateSoundPicker(mlContent, 10, -135, db.meleeSoundID or 8959,
+        local soundPicker = W:CreateSoundPicker(mlContent, 10, -135, db.meleeSoundID or ns.Media.DEFAULT_SOUND,
             function(sound) db.meleeSoundID = sound end)
         meleeSubElements[#meleeSubElements + 1] = soundPicker
 

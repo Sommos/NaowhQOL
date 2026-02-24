@@ -100,7 +100,7 @@ movementFrame:Hide()
 
 -- Text display (for text mode)
 local movementText = movementFrame:CreateFontString(nil, "OVERLAY")
-movementText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 24, "OUTLINE")
+movementText:SetFont(ns.DefaultFontPath(), 24, "OUTLINE")
 movementText:SetPoint("CENTER")
 
 -- Icon display (for icon mode)
@@ -130,7 +130,7 @@ movementBar.bg = movementBar:CreateTexture(nil, "BACKGROUND")
 movementBar.bg:SetAllPoints()
 movementBar.bg:SetColorTexture(0.1, 0.1, 0.1, 0.8)
 movementBar.text = movementBar:CreateFontString(nil, "OVERLAY")
-movementBar.text:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 12, "OUTLINE")
+movementBar.text:SetFont(ns.DefaultFontPath(), 12, "OUTLINE")
 movementBar.text:SetPoint("CENTER")
 movementBar.icon = movementBar:CreateTexture(nil, "OVERLAY")
 movementBar.icon:SetSize(20, 20)
@@ -161,7 +161,7 @@ timeSpiralFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 100)
 timeSpiralFrame:Hide()
 
 local timeSpiralText = timeSpiralFrame:CreateFontString(nil, "OVERLAY")
-timeSpiralText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 24, "OUTLINE")
+timeSpiralText:SetFont(ns.DefaultFontPath(), 24, "OUTLINE")
 timeSpiralText:SetPoint("CENTER")
 
 local timeSpiralResizeHandle
@@ -179,7 +179,7 @@ gatewayFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 150)
 gatewayFrame:Hide()
 
 local gatewayText = gatewayFrame:CreateFontString(nil, "OVERLAY")
-gatewayText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 24, "OUTLINE")
+gatewayText:SetFont(ns.DefaultFontPath(), 24, "OUTLINE")
 gatewayText:SetPoint("CENTER")
 
 local gatewayResizeHandle
@@ -241,14 +241,7 @@ end
 
 local function PlayTimeSpiralAlert(db)
     if db.tsSoundEnabled and db.tsSoundID then
-        local sound = db.tsSoundID
-        if type(sound) == "table" then
-            ns.SoundList.Play(sound)
-        elseif type(sound) == "number" then
-            PlaySound(sound)
-        elseif type(sound) == "string" then
-            PlaySoundFile(sound, "Master")
-        end
+        ns.SoundList.Play(db.tsSoundID)
     elseif db.tsTtsEnabled and db.tsTtsMessage then
         C_VoiceChat.SpeakText(db.tsTtsVoiceID or 0, db.tsTtsMessage, 1, db.tsTtsVolume or 50, true)
     end
@@ -256,14 +249,7 @@ end
 
 local function PlayGatewayAlert(db)
     if db.gwSoundEnabled and db.gwSoundID then
-        local sound = db.gwSoundID
-        if type(sound) == "table" then
-            ns.SoundList.Play(sound)
-        elseif type(sound) == "number" then
-            PlaySound(sound)
-        elseif type(sound) == "string" then
-            PlaySoundFile(sound, "Master")
-        end
+        ns.SoundList.Play(db.gwSoundID)
     elseif db.gwTtsEnabled and db.gwTtsMessage then
         C_VoiceChat.SpeakText(db.gwTtsVoiceID or 0, db.gwTtsMessage, 1, db.gwTtsVolume or 50, true)
     end
@@ -318,7 +304,7 @@ function movementFrame:UpdateDisplay()
         movementFrame.initialized = true
     end
 
-    local fontPath = db.font or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+    local fontPath = ns.Media.ResolveFont(db.font)
     local frameW = movementFrame:GetWidth()
     local frameH = movementFrame:GetHeight()
 
@@ -326,7 +312,7 @@ function movementFrame:UpdateDisplay()
     local fontSize = math.max(10, math.min(72, math.floor(frameH * 0.55)))
     local success = movementText:SetFont(fontPath, fontSize, "OUTLINE")
     if not success then
-        movementText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", fontSize, "OUTLINE")
+        movementText:SetFont(ns.DefaultFontPath(), fontSize, "OUTLINE")
     end
     local tR, tG, tB = W.GetEffectiveColor(db, "textColorR", "textColorG", "textColorB", "textColorUseClassColor")
     movementText:SetTextColor(tR, tG, tB)
@@ -390,11 +376,11 @@ function timeSpiralFrame:UpdateDisplay()
         timeSpiralFrame.initialized = true
     end
 
-    local fontPath = db.font or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+    local fontPath = ns.Media.ResolveFont(db.font)
     local fontSize = math.max(10, math.min(72, math.floor(timeSpiralFrame:GetHeight() * 0.55)))
     local success = timeSpiralText:SetFont(fontPath, fontSize, "OUTLINE")
     if not success then
-        timeSpiralText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", fontSize, "OUTLINE")
+        timeSpiralText:SetFont(ns.DefaultFontPath(), fontSize, "OUTLINE")
     end
     local tsR, tsG, tsB = W.GetEffectiveColor(db, "tsColorR", "tsColorG", "tsColorB", "tsColorUseClassColor")
     timeSpiralText:SetTextColor(tsR, tsG, tsB)
@@ -436,11 +422,11 @@ function gatewayFrame:UpdateDisplay()
         gatewayFrame.initialized = true
     end
 
-    local fontPath = db.font or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+    local fontPath = ns.Media.ResolveFont(db.font)
     local fontSize = math.max(10, math.min(72, math.floor(gatewayFrame:GetHeight() * 0.55)))
     local success = gatewayText:SetFont(fontPath, fontSize, "OUTLINE")
     if not success then
-        gatewayText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", fontSize, "OUTLINE")
+        gatewayText:SetFont(ns.DefaultFontPath(), fontSize, "OUTLINE")
     end
     local gwR, gwG, gwB = W.GetEffectiveColor(db, "gwColorR", "gwColorG", "gwColorB", "gwColorUseClassColor")
     gatewayText:SetTextColor(gwR, gwG, gwB)

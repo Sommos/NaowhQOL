@@ -49,7 +49,8 @@ local function ApplyDefaults(target, defaults)
 end
 
 -- Module default settings tables
-local NAOWH_FONT = "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+-- Use LSM names (not file paths) so locale changes resolve correctly
+local NAOWH_FONT = "Naowh"
 
 local COMBAT_TIMER_DEFAULTS = {
     enabled = false, unlock = false, font = NAOWH_FONT,
@@ -65,10 +66,10 @@ local COMBAT_ALERT_DEFAULTS = {
     point = "CENTER", x = 0, y = 100, width = 200, height = 50,
     enterText = "+Combat", leaveText = "-Combat",
     -- Enter combat audio (audioMode: "none", "sound", "tts")
-    enterAudioMode = "none", enterSoundID = 8959,
+    enterAudioMode = "none", enterSound = "Raid Warning",
     enterTtsMessage = "Combat", enterTtsVolume = 50, enterTtsRate = 0, enterTtsVoiceID = 0,
     -- Leave combat audio
-    leaveAudioMode = "none", leaveSoundID = 8959,
+    leaveAudioMode = "none", leaveSound = "Raid Warning",
     leaveTtsMessage = "Safe", leaveTtsVolume = 50, leaveTtsRate = 0, leaveTtsVoiceID = 0,
 }
 
@@ -86,7 +87,7 @@ local CROSSHAIR_DEFAULTS = {
     meleeRecolorBorder = true, meleeRecolorArms = false,
     meleeRecolorDot = false, meleeRecolorCircle = false,
     meleeOutColorR = 1, meleeOutColorG = 0, meleeOutColorB = 0,
-    meleeSoundEnabled = false, meleeSoundID = 8959, meleeSoundInterval = 3,
+    meleeSoundEnabled = false, meleeSoundID = "Raid Warning", meleeSoundInterval = 3,
 }
 
 local COMBAT_LOGGER_DEFAULTS = {
@@ -98,7 +99,7 @@ local DRAGONRIDING_DEFAULTS = {
     gap = 0, showSpeedText = true, swapPosition = false, hideWhenGroundedFull = false,
     showSecondWind = true, showWhirlingSurge = true, colorPreset = "Classic",
     unlocked = false, point = "BOTTOM", posX = 0, posY = 200,
-    barStyle = [[Interface\Buttons\WHITE8X8]],
+    barStyle = "Solid",
     speedColorR = 0.00, speedColorG = 0.49, speedColorB = 0.79,
     thrillColorR = 1.00, thrillColorG = 0.66, thrillColorB = 0.00,
     chargeColorR = 0.01, chargeColorG = 0.56, chargeColorB = 0.91,
@@ -140,7 +141,7 @@ local STEALTH_REMINDER_DEFAULTS = {
     stanceEnabled = false, stanceUnlock = false, stanceWarnR = 1, stanceWarnG = 0.4, stanceWarnB = 0,
     stancePoint = "CENTER", stanceX = 0, stanceY = 100, stanceWidth = 200, stanceHeight = 40,
     stanceCombatOnly = false, stanceDisableWhenRested = false,
-    stanceSoundEnabled = false, stanceSoundID = 8959, stanceSound = { id = 8959 }, stanceSoundInterval = 3,
+    stanceSoundEnabled = false, stanceSound = "Raid Warning", stanceSoundInterval = 3,
 }
 
 local MOVEMENT_ALERT_DEFAULTS = {
@@ -159,13 +160,13 @@ local MOVEMENT_ALERT_DEFAULTS = {
     tsEnabled = false, tsUnlock = false,
     tsText = "FREE MOVEMENT", tsColorR = 0.53, tsColorG = 1, tsColorB = 0,
     tsPoint = "CENTER", tsX = 0, tsY = 100, tsWidth = 200, tsHeight = 40,
-    tsSoundEnabled = false, tsSoundID = 8959,
+    tsSoundEnabled = false, tsSoundID = "Raid Warning",
     tsTtsEnabled = false, tsTtsMessage = "Free movement", tsTtsVolume = 50, tsTtsRate = 0,
     -- Gateway Shard sub-feature
     gwEnabled = false, gwUnlock = false, gwCombatOnly = true,
     gwText = "GATEWAY READY", gwColorR = 0.5, gwColorG = 0, gwColorB = 0.8, gwColorUseClassColor = false,
     gwPoint = "CENTER", gwX = 0, gwY = 150, gwWidth = 200, gwHeight = 40,
-    gwSoundEnabled = true, gwSoundID = 8959,
+    gwSoundEnabled = true, gwSoundID = "Raid Warning",
     gwTtsEnabled = false, gwTtsMessage = "Gateway ready", gwTtsVolume = 50,
 }
 
@@ -178,7 +179,7 @@ local RANGE_CHECK_DEFAULTS = {
 local EMOTE_DETECTION_DEFAULTS = {
     enabled = false, unlock = false, font = NAOWH_FONT,
     point = "TOP", x = 0, y = -50, width = 200, height = 60, fontSize = 16,
-    textR = 1, textG = 1, textB = 1, emotePattern = "prepares,places", soundOn = true, soundID = 8959,
+    textR = 1, textG = 1, textB = 1, emotePattern = "prepares,places", soundOn = true, soundID = "Raid Warning",
     autoEmoteEnabled = false, autoEmoteCooldown = 2,
     autoEmotes = {
         { spellId = 29893, emoteText = "prepares soulwell", enabled = true },
@@ -188,7 +189,7 @@ local EMOTE_DETECTION_DEFAULTS = {
 
 local FOCUS_CAST_BAR_DEFAULTS = {
     enabled = false, unlock = false, point = "CENTER", x = 0, y = 100, width = 250, height = 24,
-    barStyle = [[Interface\Buttons\WHITE8X8]],
+    barStyle = "Solid",
     barColorR = 0.01, barColorG = 0.56, barColorB = 0.91,
     barColorCdR = 0.5, barColorCdG = 0.5, barColorCdB = 0.5,
     bgColorR = 0.12, bgColorG = 0.12, bgColorB = 0.12, bgAlpha = 0.8,
@@ -197,7 +198,7 @@ local FOCUS_CAST_BAR_DEFAULTS = {
     textColorR = 1, textColorG = 1, textColorB = 1, hideFriendlyCasts = false,
     showEmpowerStages = true, showShieldIcon = true, showInterruptTick = true, tickColorR = 1, tickColorG = 1, tickColorB = 1, tickColorUseClassColor = false, colorNonInterrupt = true,
     nonIntColorR = 0.8, nonIntColorG = 0.2, nonIntColorB = 0.2,
-    soundEnabled = false, soundID = 8959, ttsEnabled = false, ttsMessage = "Interrupt", ttsVolume = 50, ttsRate = 0,
+    soundEnabled = false, sound = "Raid Warning", ttsEnabled = false, ttsMessage = "Interrupt", ttsVolume = 50, ttsRate = 0,
     hideOnCooldown = false,
 }
 
@@ -837,10 +838,34 @@ local function InitializeDB()
         NaowhQOL.equipmentReminder.ecSpecRules = NaowhQOL.equipmentReminder.ecSpecRules or {}
     end
 
+    -- Migrate legacy file-path media settings → LSM names
+    if ns.Media and ns.Media.MigrateDB then
+        ns.Media.MigrateDB(NaowhQOL.combatTimer,    {"font"},                  nil,            nil)
+        ns.Media.MigrateDB(NaowhQOL.combatAlert,     {"font"},                  nil,            {"enterSound", "leaveSound"})
+        ns.Media.MigrateDB(NaowhQOL.dragonriding,    {"speedFont"},             {"barStyle"},   nil)
+        ns.Media.MigrateDB(NaowhQOL.buffTracker,     {"font"},                  nil,            nil)
+        ns.Media.MigrateDB(NaowhQOL.stealthReminder, {"font"},                  nil,            {"stanceSound"})
+        ns.Media.MigrateDB(NaowhQOL.movementAlert,   {"font"},                  nil,            {"tsSoundID", "gwSoundID"})
+        ns.Media.MigrateDB(NaowhQOL.rangeCheck,      {"rangeFont"},             nil,            nil)
+        ns.Media.MigrateDB(NaowhQOL.emoteDetection,  {"font"},                  nil,            {"soundID"})
+        ns.Media.MigrateDB(NaowhQOL.focusCastBar,    {"font"},                  {"barStyle"},   {"sound"})
+        ns.Media.MigrateDB(NaowhQOL.petTracker,      {"font"},                  nil,            nil)
+        ns.Media.MigrateDB(NaowhQOL.crosshair,       nil,                       nil,            {"meleeSoundID"})
+    end
+
     -- Clean up slash commands format
     CleanupSlashCommands()
 end
 
+-- Provide a locale-aware default font path used by modules
+-- that need a path before the user picks anything (e.g. initial frame creation)
+local function DefaultFontPath()
+    if ns.Media then return ns.Media.ResolveFont("Naowh") end
+    local loc = GetLocale()
+    local asia = (loc == "koKR" or loc == "zhCN" or loc == "zhTW")
+    return "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\" .. (asia and "NaowhAsia.ttf" or "Naowh.ttf")
+end
+ns.DefaultFontPath = DefaultFontPath
 
 
 function ns:ApplyFPSOptimization()

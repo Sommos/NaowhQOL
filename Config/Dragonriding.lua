@@ -168,9 +168,9 @@ function ns:InitDragonriding()
         styleLabel:SetText(W.Colorize(L["DRAGON_BAR_STYLE"], C.BLUE))
 
         W:CreateBarStylePicker(appContent, GAP:Col(1), GAP:Row(1) - 15,
-            db.barStyle or [[Interface\Buttons\WHITE8X8]],
-            function(path)
-                db.barStyle = path
+            db.barStyle or ns.Media.DEFAULT_BAR,
+            function(name)
+                db.barStyle = name
                 drRefresh()
             end)
 
@@ -233,9 +233,9 @@ function ns:InitDragonriding()
         fontLabel:SetText(W.Colorize(L["DRAGON_SPEED_FONT"], C.BLUE))
 
         W:CreateFontPicker(appContent, GAP:Col(1), GAP:Row(7) - 15,
-            db.speedFont or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf",
-            function(path)
-                db.speedFont = path
+            db.speedFont or ns.Media.DEFAULT_FONT,
+            function(name)
+                db.speedFont = name
                 drRefresh()
             end)
 

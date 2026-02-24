@@ -171,10 +171,10 @@ function ns.DisplayUtils.MakeSlot(parent)
     f.tex:SetTexCoord(0.08, 0.92, 0.08, 0.92)
     f.timer = f:CreateFontString(nil, "OVERLAY")
     f.timer:SetPoint("BOTTOM", 0, -14)
-    f.timer:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 11, "OUTLINE")
+    f.timer:SetFont(ns.DefaultFontPath(), 11, "OUTLINE")
     f.lbl = f:CreateFontString(nil, "OVERLAY")
     f.lbl:SetPoint("TOP", 0, 12)
-    f.lbl:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 9, "OUTLINE")
+    f.lbl:SetFont(ns.DefaultFontPath(), 9, "OUTLINE")
     f.lbl:SetTextColor(0.7, 0.7, 0.7)
     return f
 end
@@ -215,7 +215,7 @@ function ns.DisplayUtils.SetFrameUnlocked(frame, unlocked, label)
         frame:SetBackdropBorderColor(1, 0.66, 0, 0.8)
         if label and not frame.unlockLabel then
             frame.unlockLabel = frame:CreateFontString(nil, "OVERLAY")
-            frame.unlockLabel:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 10, "OUTLINE")
+            frame.unlockLabel:SetFont(ns.DefaultFontPath(), 10, "OUTLINE")
             frame.unlockLabel:SetPoint("CENTER")
             frame.unlockLabel:SetTextColor(1, 0.66, 0)
         end

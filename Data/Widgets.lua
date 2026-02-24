@@ -1196,31 +1196,19 @@ function ns.Widgets:CreateAdvancedSlider(parent, label, min, max, yOffset, step,
 end
 
 function ns.Widgets:CreateSoundPicker(parent, x, y, currentSound, onSelect)
-    -- currentSound can be: number (legacy ID), {id=N}, or {path="..."}
+    -- currentSound: LSM name (string), or legacy: number, {id=N}, {path="..."}
     local VISIBLE_ROWS = 12
     local ROW_H = 20
     local FILTER_H = 20
     local WIDTH = 260
 
-    -- Normalize legacy format
-    if type(currentSound) == "number" then
-        currentSound = { id = currentSound }
-    elseif type(currentSound) == "string" then
-        currentSound = { path = currentSound }
-    elseif type(currentSound) == "table" then
-        -- Clean up corrupted saves that stored the full entry object
-        if currentSound.id and type(currentSound.id) == "number" then
-            currentSound = { id = currentSound.id }
-        elseif currentSound.path then
-            currentSound = { path = currentSound.path }
-        elseif currentSound.id and type(currentSound.id) == "string" then
-            -- Old bug: path string was stored in the id field
-            currentSound = { path = currentSound.id }
-        else
-            currentSound = { id = 8959 }
-        end
+    -- Normalize legacy formats to LSM name string
+    if type(currentSound) == "number" or type(currentSound) == "table" then
+        local name = ns.SoundList.GetNameFromLegacy(currentSound)
+        currentSound = name or ns.Media.DEFAULT_SOUND
+    elseif type(currentSound) ~= "string" then
+        currentSound = ns.Media.DEFAULT_SOUND
     end
-    currentSound = currentSound or { id = 8959 }
 
     local frame = CreateFrame("Frame", nil, parent)
     frame:SetSize(WIDTH, 28)
@@ -1426,14 +1414,14 @@ function ns.Widgets:CreateSoundPicker(parent, x, y, currentSound, onSelect)
                 row.label:SetText(entry.name)
                 row.label:SetTextColor(unpack(entry.color))
                 row:SetScript("OnClick", function()
-                    currentSound = entry.id and { id = entry.id } or { path = entry.path }
+                    currentSound = entry.name
                     selText:SetText(entry.name)
                     panel:Hide()
                     if onSelect then onSelect(currentSound) end
                     if ns.SettingsIO then ns.SettingsIO:MarkDirty() end
                 end)
                 row.play:SetScript("OnClick", function()
-                    ns.SoundList.Play(entry)
+                    ns.SoundList.Play(entry.name)
                 end)
                 row:Show()
             else
@@ -1478,30 +1466,31 @@ function ns.Widgets:CreateSoundPicker(parent, x, y, currentSound, onSelect)
         end
     end)
 
-    -- Legacy support: SetSoundID accepts number or {id=...}/{path=...}
+    -- SetSound accepts: name string, or legacy number/{id=...}/{path=...}
     local function SetSound(_, sound)
-        if type(sound) == "number" then
-            currentSound = { id = sound }
+        if type(sound) == "number" or type(sound) == "table" then
+            local name = ns.SoundList.GetNameFromLegacy(sound)
+            currentSound = name or ns.Media.DEFAULT_SOUND
         else
-            currentSound = sound
+            currentSound = sound or ns.Media.DEFAULT_SOUND
         end
         local entry = ns.SoundList.GetEntry(currentSound)
-        selText:SetText(entry and entry.name or "Unknown")
+        selText:SetText(entry and entry.name or currentSound)
     end
 
     frame.SetSound = SetSound
     frame.SetSoundID = SetSound  -- Legacy alias
     frame.GetSound = function() return currentSound end
-    frame.GetSoundID = function() return currentSound.id end  -- Legacy alias
+    frame.GetSoundID = frame.GetSound  -- Legacy alias
 
     -- Initialize display text
     local initEntry = ns.SoundList.GetEntry(currentSound)
-    selText:SetText(initEntry and initEntry.name or "Unknown")
+    selText:SetText(initEntry and initEntry.name or currentSound)
 
     return frame
 end
 
-function ns.Widgets:CreateFontPicker(parent, x, y, currentPath, onSelect)
+function ns.Widgets:CreateFontPicker(parent, x, y, currentFont, onSelect)
     local VISIBLE_ROWS = 12
     local ROW_H = 22
     local WIDTH = 260
@@ -1623,10 +1612,10 @@ function ns.Widgets:CreateFontPicker(parent, x, y, currentPath, onSelect)
                 row.label:SetText(entry.name)
                 ApplyFont(row.preview, entry.path)
                 row:SetScript("OnClick", function()
-                    currentPath = entry.path
+                    currentFont = entry.name
                     selText:SetText(entry.name)
                     panel:Hide()
-                    if onSelect then onSelect(entry.path, entry.name) end
+                    if onSelect then onSelect(entry.name) end
                     if ns.SettingsIO then ns.SettingsIO:MarkDirty() end
                 end)
                 row:Show()
@@ -1670,20 +1659,23 @@ function ns.Widgets:CreateFontPicker(parent, x, y, currentPath, onSelect)
     end)
 
     -- Public API
-    local function SetFontPath(_, path)
-        currentPath = path
-        selText:SetText(ns.FontList.GetName(path))
+    local function SetFont(_, nameOrPath)
+        -- Accept both names and legacy paths
+        currentFont = nameOrPath
+        selText:SetText(ns.FontList.GetName(nameOrPath))
     end
 
-    frame.SetFontPath = SetFontPath
-    frame.GetFontPath = function() return currentPath end
+    frame.SetFontPath = SetFont  -- backward compat alias
+    frame.SetFont = SetFont
+    frame.GetFont = function() return currentFont end
+    frame.GetFontPath = function() return currentFont end  -- backward compat
 
-    selText:SetText(ns.FontList.GetName(currentPath or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"))
+    selText:SetText(ns.FontList.GetName(currentFont or ns.Media.DEFAULT_FONT))
 
     return frame
 end
 
-function ns.Widgets:CreateBarStylePicker(parent, x, y, currentPath, onSelect)
+function ns.Widgets:CreateBarStylePicker(parent, x, y, currentBar, onSelect)
     local VISIBLE_ROWS = 6
     local ROW_H = 24
     local WIDTH = 260
@@ -1801,10 +1793,10 @@ function ns.Widgets:CreateBarStylePicker(parent, x, y, currentPath, onSelect)
                 row.label:SetText(entry.name)
                 row.swatch:SetTexture(entry.path)
                 row:SetScript("OnClick", function()
-                    currentPath = entry.path
+                    currentBar = entry.name
                     selText:SetText(entry.name)
                     panel:Hide()
-                    if onSelect then onSelect(entry.path, entry.name) end
+                    if onSelect then onSelect(entry.name) end
                     if ns.SettingsIO then ns.SettingsIO:MarkDirty() end
                 end)
                 row:Show()
@@ -1848,15 +1840,15 @@ function ns.Widgets:CreateBarStylePicker(parent, x, y, currentPath, onSelect)
     end)
 
     -- Public API
-    local function SetBarStyle(_, path)
-        currentPath = path
-        selText:SetText(ns.BarStyleList.GetName(path))
+    local function SetBarStyle(_, nameOrPath)
+        currentBar = nameOrPath
+        selText:SetText(ns.BarStyleList.GetName(nameOrPath))
     end
 
     frame.SetBarStyle = SetBarStyle
-    frame.GetBarStyle = function() return currentPath end
+    frame.GetBarStyle = function() return currentBar end
 
-    selText:SetText(ns.BarStyleList.GetName(currentPath or [[Interface\Buttons\WHITE8X8]]))
+    selText:SetText(ns.BarStyleList.GetName(currentBar or ns.Media.DEFAULT_BAR))
 
     return frame
 end
@@ -1913,7 +1905,7 @@ function ns.Widgets:CreateTextInput(parent, opts)
     })
     box:SetBackdropColor(0.05, 0.05, 0.05, 0.9)
     box:SetBackdropBorderColor(0, 0.49, 0.79, 0.4)
-    box:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 12, "")
+    box:SetFont(ns.DefaultFontPath(), 12, "")
     box:SetTextColor(1, 1, 1, 0.9)
     box:SetTextInsets(8, 8, 0, 0)
     box:SetAutoFocus(false)

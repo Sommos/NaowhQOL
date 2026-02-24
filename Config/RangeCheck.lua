@@ -83,8 +83,8 @@ function ns:InitRangeCheck()
             onCollapse = function() if RelayoutSections then RelayoutSections() end end,
         })
 
-        W:CreateFontPicker(appContent, 10, -5, db.rangeFont, function(path)
-            db.rangeFont = path
+        W:CreateFontPicker(appContent, 10, -5, db.rangeFont, function(name)
+            db.rangeFont = name
             refreshRange()
         end)
 

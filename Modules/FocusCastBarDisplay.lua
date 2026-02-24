@@ -99,12 +99,12 @@ textFrame:SetAllPoints(progressBar)
 textFrame:SetFrameLevel(castBarFrame:GetFrameLevel() + 5)
 
 local spellNameText = textFrame:CreateFontString(nil, "OVERLAY")
-spellNameText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 12, "OUTLINE")
+spellNameText:SetFont(ns.DefaultFontPath(), 12, "OUTLINE")
 spellNameText:SetPoint("LEFT", textFrame, "LEFT", 4, 0)
 spellNameText:SetJustifyH("LEFT")
 
 local castTimeText = textFrame:CreateFontString(nil, "OVERLAY")
-castTimeText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 12, "OUTLINE")
+castTimeText:SetFont(ns.DefaultFontPath(), 12, "OUTLINE")
 castTimeText:SetPoint("RIGHT", textFrame, "RIGHT", -4, 0)
 castTimeText:SetJustifyH("RIGHT")
 
@@ -364,7 +364,7 @@ local function UpdateLayout()
     bgTexture:SetVertexColor(bgR, bgG, bgB, db.bgAlpha)
 
     -- Update bar style texture
-    local barStyle = db.barStyle or [[Interface\Buttons\WHITE8X8]]
+    local barStyle = ns.Media.ResolveBar(db.barStyle)
     progressBar:SetStatusBarTexture(barStyle)
     bgTexture:SetTexture(barStyle)
 
@@ -377,7 +377,7 @@ local function UpdateLayout()
     interruptBar:SetAllPoints(progressBar)
 
     -- Update text settings
-    local fontPath = db.font or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+    local fontPath = ns.Media.ResolveFont(db.font)
     local fontSize = db.fontSize or 12
     spellNameText:SetFont(fontPath, fontSize, "OUTLINE")
     castTimeText:SetFont(fontPath, fontSize, "OUTLINE")

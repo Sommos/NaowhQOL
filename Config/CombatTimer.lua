@@ -118,8 +118,8 @@ function ns:InitCombatTimer()
             onChange = refresh
         })
 
-        W:CreateFontPicker(appContent, GA:Col(1), GA:Row(2), db.font, function(path)
-            db.font = path
+        W:CreateFontPicker(appContent, GA:Col(1), GA:Row(2), db.font, function(name)
+            db.font = name
             refresh()
         end)
 

@@ -35,7 +35,7 @@ alertText:SetPoint("CENTER", alertFrame, "CENTER", 0, 0)
 alertText:SetJustifyH("CENTER")
 alertText:SetJustifyV("MIDDLE")
 alertText:SetWordWrap(false)
-alertText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 32, "OUTLINE")
+alertText:SetFont(ns.DefaultFontPath(), 32, "OUTLINE")
 
 -- shared text color
 local txtColor = { r = 0, g = 1, b = 0 }
@@ -87,10 +87,10 @@ function alertFrame:UpdateTextSize()
     local scaledFontSize = math.min(fontSizeFromHeight, maxFontSizeFromWidth)
     scaledFontSize = math.max(10, math.min(72, scaledFontSize))
 
-    local fontPath = db.font or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+    local fontPath = ns.Media.ResolveFont(db.font)
     local success = alertText:SetFont(fontPath, scaledFontSize, "OUTLINE")
     if not success then
-        alertText:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", scaledFontSize, "OUTLINE")
+        alertText:SetFont(ns.DefaultFontPath(), scaledFontSize, "OUTLINE")
     end
 
     -- SetFont resets color to white

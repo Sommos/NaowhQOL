@@ -37,7 +37,7 @@ iconTex:SetSize(48, 48)
 iconTex:SetPoint("LEFT", alertFrame, "LEFT", 6, 0)
 
 local alertLabel = alertFrame:CreateFontString(nil, "OVERLAY")
-alertLabel:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", 16, "OUTLINE")
+alertLabel:SetFont(ns.DefaultFontPath(), 16, "OUTLINE")
 alertLabel:SetPoint("TOPLEFT", iconTex, "TOPRIGHT", 8, 0)
 alertLabel:SetPoint("BOTTOMRIGHT", alertFrame, "BOTTOMRIGHT", -6, 0)
 alertLabel:SetJustifyH("LEFT")
@@ -56,11 +56,11 @@ local function ShowAlert(text)
     iconTex:SetTexture("Interface\\Icons\\INV_Misc_Food_164_Fish_Feast")
     iconTex:Show()
 
-    local fontPath = db.font or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+    local fontPath = ns.Media.ResolveFont(db.font)
     local fontSize = db.fontSize or 16
     local success = alertLabel:SetFont(fontPath, fontSize, "OUTLINE")
     if not success then
-        alertLabel:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", fontSize, "OUTLINE")
+        alertLabel:SetFont(ns.DefaultFontPath(), fontSize, "OUTLINE")
     end
 
     alertLabel:SetText(text)
@@ -110,11 +110,11 @@ function alertFrame:UpdateDisplay()
         alertLabel:SetText("Emote Detection Preview")
         alertLabel:SetTextColor(db.textR or 1, db.textG or 1, db.textB or 1)
 
-        local fontPath = db.font or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf"
+        local fontPath = ns.Media.ResolveFont(db.font)
         local fontSize = db.fontSize or 16
         local success = alertLabel:SetFont(fontPath, fontSize, "OUTLINE")
         if not success then
-            alertLabel:SetFont("Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf", fontSize, "OUTLINE")
+            alertLabel:SetFont(ns.DefaultFontPath(), fontSize, "OUTLINE")
         end
 
         alertFrame:SetAlpha(1)
@@ -276,12 +276,7 @@ loader:SetScript("OnEvent", ns.PerfMonitor:Wrap("Emote Detection", function(self
             ShowAlert(text)
 
             if db.soundOn then
-                local sound = db.soundID or 8959
-                if type(sound) == "table" then
-                    ns.SoundList.Play(sound)
-                elseif type(sound) == "number" then
-                    PlaySound(sound, "Master")
-                end
+                ns.SoundList.Play(db.soundID or ns.Media.DEFAULT_SOUND)
             end
         end)
     end

@@ -17,9 +17,10 @@ function ns:InitFocusCastBar()
     local db = NaowhQOL.focusCastBar
     local display = ns.FocusCastBarDisplay
 
-    -- Migrate old soundID format to new sound format
+    -- Migrate old soundID format to new sound name format
     if db.soundID and not db.sound then
-        db.sound = { id = db.soundID }
+        local name = ns.SoundList.GetNameFromLegacy(db.soundID)
+        db.sound = name or ns.Media.DEFAULT_SOUND
     end
 
     W:CachedPanel(cache, "fcbFrame", p, function(f)
@@ -114,9 +115,9 @@ function ns:InitFocusCastBar()
         styleLabel:SetText(W.Colorize(L["FOCUS_BAR_STYLE"], C.BLUE))
 
         W:CreateBarStylePicker(appContent, G:Col(1), G:Row(4) - 15,
-            db.barStyle or [[Interface\Buttons\WHITE8X8]],
-            function(path)
-                db.barStyle = path
+            db.barStyle or ns.Media.DEFAULT_BAR,
+            function(name)
+                db.barStyle = name
                 onUpdate()
             end)
 
@@ -193,8 +194,8 @@ function ns:InitFocusCastBar()
             onChange = onUpdate
         })
 
-        W:CreateFontPicker(textContent, GT:Col(1), GT:Row(2), db.font, function(path)
-            db.font = path
+        W:CreateFontPicker(textContent, GT:Col(1), GT:Row(2), db.font, function(name)
+            db.font = name
             onUpdate()
         end)
 

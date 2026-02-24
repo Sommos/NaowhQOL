@@ -312,17 +312,13 @@ local function PlayMeleeSoundOnce(soundID)
     local now = GetTime()
     if now - lastMeleeSoundTime < MELEE_SOUND_COOLDOWN then return end
     lastMeleeSoundTime = now
-    if type(soundID) == "table" then
-        ns.SoundList.Play(soundID)
-    elseif type(soundID) == "number" then
-        PlaySound(soundID, "Master")
-    end
+    ns.SoundList.Play(soundID or ns.Media.DEFAULT_SOUND)
 end
 
 local function StartMeleeSound(db)
     StopMeleeSound()
     local interval = db.meleeSoundInterval or 3
-    local soundID = db.meleeSoundID or 8959
+    local soundID = db.meleeSoundID or ns.Media.DEFAULT_SOUND
     PlayMeleeSoundOnce(soundID)
     if interval > 0 then
         meleeSoundTicker = C_Timer.NewTicker(interval, function()

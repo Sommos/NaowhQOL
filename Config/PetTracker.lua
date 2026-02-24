@@ -116,9 +116,9 @@ function ns:InitPetTracker()
 
         -- Row 1: Font Picker
         W:CreateFontPicker(appContent, G:Col(1), G:Row(1),
-            db.font or "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\Naowh.ttf",
-            function(path)
-                db.font = path
+            db.font or ns.Media.DEFAULT_FONT,
+            function(name)
+                db.font = name
                 refresh()
             end)
 

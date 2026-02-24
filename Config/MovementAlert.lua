@@ -138,8 +138,8 @@ function ns:InitMovementAlert()
         end
 
         -- Row 1: Font | Text Color
-        W:CreateFontPicker(appContent, LA:Col(1), LA:Row(1) + 12, db.font, function(path)
-            db.font = path
+        W:CreateFontPicker(appContent, LA:Col(1), LA:Row(1) + 12, db.font, function(name)
+            db.font = name
             refreshAll()
         end)
 
@@ -278,7 +278,7 @@ function ns:InitMovementAlert()
             end
         })
 
-        W:CreateSoundPicker(tsColContent, LT:Col(2), LT:Row(3) + 11, db.tsSoundID or 8959,
+        W:CreateSoundPicker(tsColContent, LT:Col(2), LT:Row(3) + 11, db.tsSoundID or ns.Media.DEFAULT_SOUND,
             function(sound) db.tsSoundID = sound end)
 
         -- Row 3: Play TTS
@@ -386,7 +386,7 @@ function ns:InitMovementAlert()
             onChange = refreshGateway
         })
 
-        W:CreateSoundPicker(gwColContent, LG:Col(2), LG:Row(2) + 11, db.gwSoundID or 8959,
+        W:CreateSoundPicker(gwColContent, LG:Col(2), LG:Row(2) + 11, db.gwSoundID or ns.Media.DEFAULT_SOUND,
             function(sound) db.gwSoundID = sound end)
 
         W:CreateCheckbox(gwColContent, {

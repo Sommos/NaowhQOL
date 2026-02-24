@@ -1,17 +1,7 @@
 local addonName, ns = ...
 
-local ADDON_FONT_DIR = "Interface\\AddOns\\NaowhQOL\\Assets\\Fonts\\"
-
--- Pick the correct Naowh font variant based on client locale
-local locale = GetLocale()
-local isAsiaLocale = (locale == "koKR" or locale == "zhCN" or locale == "zhTW")
-local naowhFontFile = isAsiaLocale and "NaowhAsia.ttf" or "Naowh.ttf"
-
--- Custom fonts shipped with the addon (drop font files in Assets/Fonts and add a line here)
-local custom = {
-    { name = "Naowh", file = naowhFontFile },
-    { name = "Metropolis ExtraBold", file = "Metropolis-ExtraBold.otf" },
-}
+-- Custom bundled fonts are now registered with LSM in Data/Media.lua
+-- so they get proper locale-aware paths automatically.
 
 -- Built-in WoW game fonts (always available)
 local builtIn = {
@@ -57,17 +47,7 @@ function ns.FontList.Rebuild()
         seenName[f.name] = true
     end
 
-    -- Custom fonts from Assets/Fonts (skip duplicates by path or name)
-    for _, f in ipairs(custom) do
-        local fullPath = ADDON_FONT_DIR .. f.file
-        if not seenPath[fullPath] and not seenName[f.name] then
-            merged[#merged + 1] = { name = f.name, path = fullPath }
-            seenPath[fullPath] = true
-            seenName[f.name] = true
-        end
-    end
-
-    -- Pull in LSM fonts if available (skip duplicates by path or name)
+    -- Pull in LSM fonts (includes our bundled fonts registered in Media.lua)
     local LSM = LibStub and LibStub("LibSharedMedia-3.0", true)
     if LSM then
         local fontTable = LSM:HashTable("font")
@@ -89,10 +69,15 @@ function ns.FontList.Rebuild()
     for i = 1, #ns.FontList do ns.FontList[i] = nil end
     for i, f in ipairs(merged) do ns.FontList[i] = f end
 
-    -- Rebuild reverse lookup
+    -- Rebuild reverse lookups
     ns.FontList._nameByPath = {}
+    ns.FontList._pathByName = {}
     for _, f in ipairs(ns.FontList) do
         ns.FontList._nameByPath[f.path] = f.name
+        -- First path wins for a given name (built-in before LSM)
+        if not ns.FontList._pathByName[f.name] then
+            ns.FontList._pathByName[f.name] = f.path
+        end
     end
 end
 
@@ -101,9 +86,21 @@ function ns.FontList.MarkDirty()
     dirty = true
 end
 
-function ns.FontList.GetName(path)
-    if not ns.FontList._nameByPath then ns.FontList.Rebuild() end
-    return ns.FontList._nameByPath[path] or ("Unknown (" .. tostring(path) .. ")")
+function ns.FontList.GetName(nameOrPath)
+    if dirty or not ns.FontList._nameByPath then ns.FontList.Rebuild() end
+    -- If it looks like an LSM name (no path separators), return as-is if we know it
+    if type(nameOrPath) == "string" and not nameOrPath:find("\\") and not nameOrPath:find("/") then
+        if ns.FontList._pathByName[nameOrPath] then
+            return nameOrPath
+        end
+    end
+    return ns.FontList._nameByPath[nameOrPath] or ("Unknown (" .. tostring(nameOrPath) .. ")")
+end
+
+-- Get the path for a given LSM font name
+function ns.FontList.GetPath(name)
+    if dirty or not ns.FontList._pathByName then ns.FontList.Rebuild() end
+    return ns.FontList._pathByName[name]
 end
 
 -- Hook LSM callback to mark dirty when new fonts are registered
